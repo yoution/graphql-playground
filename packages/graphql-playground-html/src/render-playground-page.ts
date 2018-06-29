@@ -1,12 +1,11 @@
 import getLoadingMarkup from './get-loading-markup'
-import { GraphQLConfigData } from 'graphql-config'
 
 export interface MiddlewareOptions {
   endpoint?: string
   subscriptionEndpoint?: string
   workspaceName?: string
   env?: any
-  config?: GraphQLConfigData
+  config?: any
   settings?: ISettings
   schema?: IntrospectionResult
   tabs?: Tab[]
