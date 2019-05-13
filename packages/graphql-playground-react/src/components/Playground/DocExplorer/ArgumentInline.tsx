@@ -8,6 +8,7 @@ export interface Props {
 }
 
 export default function Argument({ arg, showDefaultValue }: Props) {
+  const ast = astFromValue(arg.defaultValue, arg.type)
   return (
     <ArgumentLine>
       <span className="arg-name">{arg.name}</span>
@@ -17,9 +18,7 @@ export default function Argument({ arg, showDefaultValue }: Props) {
         showDefaultValue !== false && (
           <span>
             {' = '}
-            <span className="arg-default-value">
-              {print(astFromValue(arg.defaultValue, arg.type))}
-            </span>
+            <span className="arg-default-value">{ast && print(ast)}</span>
           </span>
         )}
     </ArgumentLine>
