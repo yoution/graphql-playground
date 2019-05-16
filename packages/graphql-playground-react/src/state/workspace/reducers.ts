@@ -41,15 +41,22 @@ export class Workspace extends Record({
 }
 
 export const defaultSettings: ISettings = {
-  'general.betaUpdates': false,
   'editor.cursorShape': 'line',
-  'editor.fontSize': 14,
   'editor.fontFamily': `'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace`,
-  'editor.theme': 'dark',
+  'editor.fontSize': 14,
   'editor.reuseHeaders': true,
+  'editor.theme': 'dark',
+  'general.betaUpdates': false,
   'prettier.printWidth': 80,
+  'prettier.tabWidth': 2,
+  'prettier.useTabs': false,
   'request.credentials': 'omit',
+  'schema.disableComments': true,
+  'schema.polling.enable': true,
+  'schema.polling.endpointFilter': '*localhost*',
+  'schema.polling.interval': 2000,
   'tracing.hideTracingResponse': true,
+  'queryPlan.hideQueryPlanResponse': true,
 }
 
 // tslint:disable-next-line:max-classes-per-file

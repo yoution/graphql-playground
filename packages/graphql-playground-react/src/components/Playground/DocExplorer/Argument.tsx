@@ -17,6 +17,7 @@ export default function Argument({
   y,
 }: // sessionId,
 Props) {
+  const ast = astFromValue(arg.defaultValue, arg.type)
   return (
     <span>
       <TypeLink
@@ -29,9 +30,7 @@ Props) {
           showDefaultValue !== false && (
             <span>
               {' = '}
-              <span className="arg-default-value">
-                {print(astFromValue(arg.defaultValue, arg.type))}
-              </span>
+              <span className="arg-default-value">{ast && print(ast)}</span>
             </span>
           )
         }

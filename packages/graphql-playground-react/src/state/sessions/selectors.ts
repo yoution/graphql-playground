@@ -67,6 +67,22 @@ export const getCurrentQueryStartTime = makeSessionSelector(
 )
 export const getCurrentQueryEndTime = makeSessionSelector('currentQueryEndTime')
 export const getIsReloadingSchema = makeSessionSelector('isReloadingSchema')
+export const getIsPollingSchema = createSelector(
+  [getEndpoint, getSettings],
+  (endpoint, settings) => {
+    const json = JSON.parse(settings)
+    try {
+      const isPolling =
+        json['schema.polling.enable'] &&
+        endpoint.match(`/${json['schema.polling.endpointFilter']}`) &&
+        true
+      return isPolling
+    } catch (e) {
+      return false
+    }
+  },
+)
+
 export const getResponseExtensions = makeSessionSelector('responseExtensions')
 export const getQueryVariablesActive = makeSessionSelector(
   'queryVariablesActive',
@@ -77,13 +93,45 @@ export const getVariableEditorOpen = makeSessionSelector('variableEditorOpen')
 export const getVariableEditorHeight = makeSessionSelector(
   'variableEditorHeight',
 )
-export const getResponseTracingOpen = makeSessionSelector('responseTracingOpen')
+export const getIsExtensionsDrawerOpen = makeSessionSelector(
+  'isExtensionsDrawerOpen',
+)
+export const getIsTracingActive = makeSessionSelector('isTracingActive')
 export const getResponseTracingHeight = makeSessionSelector(
   'responseTracingHeight',
 )
 export const getDocExplorerWidth = makeSessionSelector('docExplorerWidth')
 export const getNextQueryStartTime = makeSessionSelector('nextQueryStartTime')
 export const getTracingSupported = makeSessionSelector('tracingSupported')
+export const getIsQueryPlanSupported = makeSessionSelector(
+  'isQueryPlanSupported',
+)
+
+function getSettings(state) {
+  return state.getIn(['settingsString'])
+}
+
+export const getTabWidth = createSelector([getSettings], settings => {
+  try {
+    const json = JSON.parse(settings)
+    return json['prettier.tabWidth'] || 2
+  } catch (e) {
+    //
+  }
+
+  return 2
+})
+
+export const getUseTabs = createSelector([getSettings], settings => {
+  try {
+    const json = JSON.parse(settings)
+    return json['prettier.useTabs'] || false
+  } catch (e) {
+    //
+  }
+
+  return false
+})
 
 export const getHeadersCount = createSelector([getHeaders], headers => {
   try {
@@ -133,6 +181,11 @@ export function getParsedVariablesFromSession(session) {
 export const getTracing = createSelector(
   [getResponseExtensions],
   extensions => extensions && extensions.tracing,
+)
+
+export const getQueryPlan = createSelector(
+  [getResponseExtensions],
+  extensions => extensions && extensions.__queryPlanExperimental,
 )
 
 export const getSessionsArray = createSelector([getSessionsState], state => {

@@ -40,7 +40,7 @@ import { safely } from '../../utils'
 import { set } from 'immutable'
 
 // tslint:disable
-let subscriptionEndpoint = ''
+let subscriptionEndpoint
 
 export function setSubscriptionEndpoint(endpoint) {
   subscriptionEndpoint = endpoint
@@ -58,7 +58,7 @@ export interface Headers {
 
 export const defaultLinkCreator = (
   session: LinkCreatorProps,
-  wsEndpoint?: string,
+  subscriptionEndpoint?: string,
 ): { link: ApolloLink; subscriptionClient?: SubscriptionClient } => {
   let connectionParams = {}
   const { headers, credentials } = session
@@ -73,20 +73,15 @@ export const defaultLinkCreator = (
     credentials,
   })
 
-  if (!(wsEndpoint || subscriptionEndpoint)) {
+  if (!subscriptionEndpoint) {
     return { link: httpLink }
   }
 
-  const finalSubscriptionsEndpoint = wsEndpoint || subscriptionEndpoint
-
-  const subscriptionClient = new SubscriptionClient(
-    finalSubscriptionsEndpoint,
-    {
-      timeout: 20000,
-      lazy: true,
-      connectionParams,
-    },
-  )
+  const subscriptionClient = new SubscriptionClient(subscriptionEndpoint, {
+    timeout: 20000,
+    lazy: true,
+    connectionParams,
+  })
 
   const webSocketLink = new WebSocketLink(subscriptionClient)
   return {
@@ -129,16 +124,23 @@ function* runQuerySaga(action) {
   yield put(setSubscriptionActive(isSubscription(operation)))
   yield put(startQuery())
   let headers = parseHeaders(session.headers)
-  if (session.tracingSupported && session.responseTracingOpen) {
+  if (session.tracingSupported && session.isExtensionsDrawerOpen) {
     headers = set(headers, 'X-Apollo-Tracing', '1')
   }
+
+  if (session.isQueryPlanSupported && session.isExtensionsDrawerOpen) {
+    // Breaking the X- header pattern here since it's dated, and not
+    // recommended: https://www.mnot.net/blog/2009/02/18/x-
+    headers = set(headers, 'Apollo-Query-Plan-Experimental', '1')
+  }
+
   const lol = {
     endpoint: session.endpoint,
     headers,
     credentials: settings['request.credentials'],
   }
 
-  const { link, subscriptionClient } = linkCreator(lol)
+  const { link, subscriptionClient } = linkCreator(lol, subscriptionEndpoint)
   yield put(setCurrentQueryStartTime(new Date()))
 
   let firstResponse = false
@@ -189,12 +191,24 @@ function* runQuerySaga(action) {
       const { value, error } = yield take(channel)
       if (value && value.extensions) {
         const extensions = value.extensions
+
         yield put(setResponseExtensions(extensions))
         if (
           value.extensions.tracing &&
           settings['tracing.hideTracingResponse']
         ) {
           delete value.extensions.tracing
+        }
+
+        if (
+          value.extensions.__queryPlanExperimental &&
+          settings['queryPlan.hideQueryPlanResponse']
+        ) {
+          delete value.extensions.__queryPlanExperimental
+        }
+
+        if (value.extensions && Object.keys(value.extensions).length === 0) {
+          delete value.extensions
         }
       }
       const response = new ResponseRecord({

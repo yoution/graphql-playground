@@ -1,24 +1,36 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { isNamedType, GraphQLSchema } from 'graphql'
+import { List } from 'immutable'
+
+// Query & Response Components
 import ExecuteButton from './ExecuteButton'
 import QueryEditor from './QueryEditor'
 import EditorWrapper, { Container } from './EditorWrapper'
 import CodeMirrorSizer from 'graphiql/dist/utility/CodeMirrorSizer'
-import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
-import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
-import { connect } from 'react-redux'
-
-import Spinner from '../Spinner'
-import Results from './Results'
-import ResponseTracing from './ResponseTracing'
-import GraphDocs from './DocExplorer/GraphDocs'
-import { styled } from '../../styled/index'
 import TopBar from './TopBar/TopBar'
 import {
   VariableEditorComponent,
   HeadersEditorComponent,
 } from './VariableEditor'
+import Spinner from '../Spinner'
+import Results from './Results'
+import ResponseTracing from './ResponseTracing'
+import { QueryPlan } from './QueryPlan'
+
+import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
+import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
+
+// Explorer Components
+import SideTab from './ExplorerTabs/SideTab'
+import SideTabs from './ExplorerTabs/SideTabs'
+import SDLView from './SchemaExplorer/SDLView'
+import GraphDocs from './DocExplorer/GraphDocs'
+
+import { styled } from '../../styled/index'
+
+// Redux Dependencies
+import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import {
   getQueryRunning,
@@ -26,7 +38,8 @@ import {
   getSubscriptionActive,
   getVariableEditorOpen,
   getVariableEditorHeight,
-  getResponseTracingOpen,
+  getIsExtensionsDrawerOpen,
+  getIsTracingActive,
   getResponseTracingHeight,
   getResponseExtensions,
   getCurrentQueryStartTime,
@@ -39,6 +52,7 @@ import {
   getOperationName,
   getHeadersCount,
   getSelectedSessionIdFromRoot,
+  getIsQueryPlanSupported,
 } from '../../state/sessions/selectors'
 import {
   updateQueryFacts,
@@ -55,7 +69,6 @@ import {
   toggleVariables,
   fetchSchema,
 } from '../../state/sessions/actions'
-import { List } from 'immutable'
 import { ResponseRecord } from '../../state/sessions/reducers'
 
 /**
@@ -66,6 +79,7 @@ import { ResponseRecord } from '../../state/sessions/reducers'
 export interface Props {
   onRef?: any
   shareEnabled?: boolean
+  fixedEndpoint?: boolean
   schema?: GraphQLSchema
 }
 
@@ -93,7 +107,8 @@ export interface ReduxProps {
   variableEditorHeight: number
   currentQueryStartTime?: Date
   currentQueryEndTime?: Date
-  responseTracingOpen: boolean
+  isExtensionsDrawerOpen: boolean
+  isTracingActive: boolean
   responseTracingHeight: number
   responseExtensions: any
   tracingSupported?: boolean
@@ -104,6 +119,7 @@ export interface ReduxProps {
   operationName: string
   query: string
   sessionId: string
+  isQueryPlanSupported: boolean
 }
 
 export interface SimpleProps {
@@ -123,11 +139,15 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   public resultComponent
   public editorBarComponent
   public docExplorerComponent: any // later React.Component<...>
-
+  public graphExplorerComponent: any
+  public schemaExplorerComponent: any
   private queryResizer: any
   private responseResizer: any
   private queryVariablesRef
   private httpHeadersRef
+  private containerComponent
+  private tracingRef
+  private queryPlanRef
 
   componentDidMount() {
     // Ensure a form of a schema exists (including `null`) and
@@ -155,9 +175,12 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
   render() {
     return (
-      <Container>
+      <Container setRef={this.setContainerComponent}>
         <EditorWrapper>
-          <TopBar shareEnabled={this.props.shareEnabled} />
+          <TopBar
+            shareEnabled={this.props.shareEnabled}
+            fixedEndpoint={this.props.fixedEndpoint}
+          />
           <EditorBar
             ref={this.setEditorBarComponent}
             onMouseDown={this.handleResizeStart}
@@ -178,15 +201,15 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
                   isOpen={this.props.variableEditorOpen}
                   onMouseDown={this.handleVariableResizeStart}
                 >
-                  <VariableEditorSubtitle
-                    isOpen={this.props.queryVariablesActive}
+                  <DrawerTab
+                    isActive={this.props.queryVariablesActive}
                     ref={this.setQueryVariablesRef}
                     onClick={this.props.openQueryVariables}
                   >
                     Query Variables
-                  </VariableEditorSubtitle>
-                  <VariableEditorSubtitle
-                    isOpen={!this.props.queryVariablesActive}
+                  </DrawerTab>
+                  <DrawerTab
+                    isActive={!this.props.queryVariablesActive}
                     ref={this.setHttpHeadersRef}
                     onClick={this.props.closeQueryVariables}
                   >
@@ -194,7 +217,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
                       (this.props.headersCount && this.props.headersCount > 0
                         ? `(${this.props.headersCount})`
                         : '')}
-                  </VariableEditorSubtitle>
+                  </DrawerTab>
                 </VariableEditorTitle>
                 {this.props.queryVariablesActive ? (
                   <VariableEditorComponent
@@ -233,24 +256,58 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
               {this.props.subscriptionActive && (
                 <Listening>Listening &hellip;</Listening>
               )}
-              <ResponseTracking
-                isOpen={this.props.responseTracingOpen}
+              <ExtensionsDrawer
+                isOpen={this.props.isExtensionsDrawerOpen}
                 height={this.props.responseTracingHeight}
               >
-                <ResponseTrackingTitle
-                  isOpen={this.props.responseTracingOpen}
-                  onMouseDown={this.handleTracingResizeStart}
+                <ExtensionsDrawerTitle
+                  isOpen={this.props.isExtensionsDrawerOpen}
+                  onMouseDown={this.handleExtensionsDrawerResizeStart}
                 >
-                  <VariableEditorSubtitle isOpen={false}>
+                  <DrawerTab
+                    isActive={this.props.isTracingActive}
+                    ref={this.setTracingRef}
+                    onClick={this.props.openTracing}
+                  >
                     Tracing
-                  </VariableEditorSubtitle>
-                </ResponseTrackingTitle>
-                <ResponseTracing open={this.props.responseTracingOpen} />
-              </ResponseTracking>
+                  </DrawerTab>
+                  {this.props.isQueryPlanSupported && (
+                    <DrawerTab
+                      isActive={!this.props.isTracingActive}
+                      ref={this.setQueryPlanRef}
+                      onClick={this.props.closeTracing}
+                    >
+                      Query Plan
+                    </DrawerTab>
+                  )}
+                </ExtensionsDrawerTitle>
+                {this.props.isTracingActive ||
+                !this.props.isQueryPlanSupported ? (
+                  <ResponseTracing open={true} />
+                ) : (
+                  <QueryPlan />
+                )}
+              </ExtensionsDrawer>
             </ResultWrap>
           </EditorBar>
         </EditorWrapper>
-        <GraphDocs ref={this.setDocExplorerRef} schema={this.props.schema} />
+        {this.containerComponent && (
+          <SideTabs maxWidth={this.containerComponent.offsetWidth - 86}>
+            <SideTab label="Docs" activeColor="green" tabWidth="49px">
+              <GraphDocs
+                schema={this.props.schema}
+                ref={this.setDocExplorerRef}
+              />
+            </SideTab>
+            <SideTab label="Schema" activeColor="blue" tabWidth="65px">
+              <SDLView
+                schema={this.props.schema}
+                ref={this.setSchemaExplorerRef}
+                sessionId={this.props.sessionId}
+              />
+            </SideTab>
+          </SideTabs>
+        )}
       </Container>
     )
   }
@@ -261,6 +318,14 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
   setHttpHeadersRef = ref => {
     this.httpHeadersRef = ref
+  }
+
+  setQueryPlanRef = ref => {
+    this.queryPlanRef = ref
+  }
+
+  setTracingRef = ref => {
+    this.tracingRef = ref
   }
 
   setQueryResizer = ref => {
@@ -292,9 +357,24 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
       this.docExplorerComponent = ref.getWrappedInstance()
     }
   }
+  setGraphExplorerRef = ref => {
+    if (ref) {
+      this.graphExplorerComponent = ref.getWrappedInstance()
+    }
+  }
+  setSchemaExplorerRef = ref => {
+    if (ref) {
+      this.schemaExplorerComponent = ref.getWrappedInstance()
+    }
+  }
+  setContainerComponent = ref => {
+    this.containerComponent = ref
+  }
 
   handleClickReference = reference => {
-    this.docExplorerComponent.showDocFromType(reference.field || reference)
+    if (this.docExplorerComponent) {
+      this.docExplorerComponent.showDocFromType(reference.field || reference)
+    }
   }
 
   /**
@@ -415,12 +495,21 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
     )
   }
 
-  private handleTracingResizeStart = downEvent => {
+  private handleExtensionsDrawerResizeStart = downEvent => {
     downEvent.preventDefault()
 
     let didMove = false
+    const wasOpen = this.props.isExtensionsDrawerOpen
     const hadHeight = this.props.responseTracingHeight
     const offset = downEvent.clientY - getTop(downEvent.target)
+
+    if (
+      wasOpen &&
+      (downEvent.target === this.tracingRef ||
+        downEvent.target === this.queryPlanRef)
+    ) {
+      return
+    }
 
     let onMouseMove: any = moveEvent => {
       if (moveEvent.buttons === 0) {
@@ -527,7 +616,8 @@ const mapStateToProps = createStructuredSelector({
   subscriptionActive: getSubscriptionActive,
   variableEditorOpen: getVariableEditorOpen,
   variableEditorHeight: getVariableEditorHeight,
-  responseTracingOpen: getResponseTracingOpen,
+  isExtensionsDrawerOpen: getIsExtensionsDrawerOpen,
+  isTracingActive: getIsTracingActive,
   responseTracingHeight: getResponseTracingHeight,
   responseExtensions: getResponseExtensions,
   currentQueryStartTime: getCurrentQueryStartTime,
@@ -540,6 +630,7 @@ const mapStateToProps = createStructuredSelector({
   operationName: getOperationName,
   headersCount: getHeadersCount,
   sessionId: getSelectedSessionIdFromRoot,
+  isQueryPlanSupported: getIsQueryPlanSupported,
 })
 
 export default // TODO fix redux types
@@ -619,12 +710,6 @@ interface TitleProps {
 }
 
 const BottomDrawerTitle = styled.div`
-  background: #0b1924;
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 0.53px;
-  line-height: 14px;
-  font-size: 14px;
   padding: 14px 14px 15px 21px;
   user-select: none;
 `
@@ -650,29 +735,42 @@ const VariableEditorTitle = styled<TitleProps>(({ isOpen, ...rest }) => (
   background: ${p => p.theme.editorColours.leftDrawerBackground};
 `
 
-const VariableEditorSubtitle = styled<TitleProps, 'span'>('span')`
-  margin-right: 10px;
-  cursor: pointer;
-  color: ${p =>
-    p.isOpen
-      ? p.theme.editorColours.drawerText
-      : p.theme.editorColours.drawerTextInactive};
-  &:last-child {
-    margin-right: 0;
-  }
-`
-
-const ResponseTracking = styled(BottomDrawer)`
+const ExtensionsDrawer = styled(BottomDrawer)`
   background: ${p => p.theme.editorColours.rightDrawerBackground};
 `
 
-const ResponseTrackingTitle = styled<TitleProps>(({ isOpen, ...rest }) => (
+const ExtensionsDrawerTitle = styled<TitleProps>(({ isOpen, ...rest }) => (
   <BottomDrawerTitle {...rest} />
 ))`
   text-align: right;
   background: ${p => p.theme.editorColours.rightDrawerBackground};
   cursor: ${props => (props.isOpen ? 's-resize' : 'n-resize')};
   color: ${p => p.theme.editorColours.drawerTextInactive};
+`
+
+interface DrawerTabProps {
+  onClick?: (e: Event) => void
+  onMouseDown?: (e: Event) => void
+  isActive: boolean
+  ref?: any
+}
+const DrawerTab = styled<DrawerTabProps, 'button'>('button')`
+  padding: 0;
+  margin-right: 10px;
+  background: #0b1924;
+
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.53px;
+  line-height: 14px;
+  font-size: 14px;
+  color: ${p =>
+    p.isActive
+      ? p.theme.editorColours.drawerText
+      : p.theme.editorColours.drawerTextInactive};
+  &:last-child {
+    margin-right: 0;
+  }
 `
 
 interface QueryProps {

@@ -12,12 +12,16 @@ export interface MiddlewareOptions {
   codeTheme?: EditorColours
 }
 
+export type CursorShape = 'line' | 'block' | 'underline'
 export type Theme = 'dark' | 'light'
+
 export interface ISettings {
   'general.betaUpdates': boolean
+  'editor.cursorShape': CursorShape
   'editor.theme': Theme
   'editor.reuseHeaders': boolean
   'tracing.hideTracingResponse': boolean
+  'queryPlan.hideQueryPlanResponse': boolean
   'editor.fontSize': number
   'editor.fontFamily': string
   'request.credentials': string
@@ -52,9 +56,11 @@ export interface IntrospectionResult {
 }
 
 export interface RenderPageOptions extends MiddlewareOptions {
-  version: string
+  version?: string
   cdnUrl?: string
   env?: any
+  title?: string
+  faviconUrl?: string | null
 }
 
 export interface Tab {
@@ -67,22 +73,35 @@ export interface Tab {
 
 const loading = getLoadingMarkup()
 
-const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm/@apollographql' }) => `
-    <link rel="stylesheet" href="${cdnUrl}/graphql-playground-react${version
-  ? `@${version}`
-  : ''}/build/static/css/index.css" />
-    <link rel="shortcut icon" href="${cdnUrl}/graphql-playground-react${version
-  ? `@${version}`
-  : ''}/build/favicon.png" />
-    <script src="${cdnUrl}/graphql-playground-react${version
-  ? `@${version}`
-  : ''}/build/static/js/middleware.js"></script>
+const getCdnMarkup = ({
+  version,
+  cdnUrl = '//cdn.jsdelivr.net/npm/@apollographql',
+  faviconUrl,
+}) => `
+    <link rel="stylesheet" href="${cdnUrl}/graphql-playground-react${
+  version ? `@${version}` : ''
+}/build/static/css/index.css" />
+    ${
+      typeof faviconUrl === 'string'
+        ? `<link rel="shortcut icon" href="${faviconUrl}" />`
+        : ''
+    }
+    ${
+      faviconUrl === undefined
+        ? `<link rel="shortcut icon" href="${cdnUrl}/graphql-playground-react${
+            version ? `@${version}` : ''
+          }/build/favicon.png" />`
+        : ''
+    }
+    <script src="${cdnUrl}/graphql-playground-react${
+  version ? `@${version}` : ''
+}/build/static/js/middleware.js"></script>
 `
 
 export function renderPlaygroundPage(options: RenderPageOptions) {
   const extendedOptions: any = {
     ...options,
-    canSaveConfig: false
+    canSaveConfig: false,
   }
   // for compatibility
   if ((options as any).subscriptionsEndpoint) {
@@ -94,7 +113,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
   if (!extendedOptions.endpoint && !extendedOptions.configString) {
     /* tslint:disable-next-line */
     console.warn(
-      `WARNING: You didn't provide an endpoint and don't have a .graphqlconfig. Make sure you have at least one of them.`
+      `WARNING: You didn't provide an endpoint and don't have a .graphqlconfig. Make sure you have at least one of them.`,
     )
   }
 
@@ -104,11 +123,13 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
   <head>
     <meta charset=utf-8 />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
-    <link rel="shortcut icon" href="https://graphcool-playground.netlify.com/favicon.png">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700" rel="stylesheet">
     <title>${extendedOptions.title || 'GraphQL Playground'}</title>
-    ${extendedOptions.env === 'react' || extendedOptions.env === 'electron'
-      ? ''
-      : getCdnMarkup(extendedOptions)}
+    ${
+      extendedOptions.env === 'react' || extendedOptions.env === 'electron'
+        ? ''
+        : getCdnMarkup(extendedOptions)
+    }
   </head>
   <body>
     <style type="text/css">
@@ -169,7 +190,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
         GraphQLPlayground.init(root, ${JSON.stringify(
           extendedOptions,
           null,
-          2
+          2,
         )})
       })
     </script>

@@ -21,6 +21,7 @@ import {
   setResponseExtensions,
   setCurrentQueryStartTime,
   setCurrentQueryEndTime,
+  setIsQueryPlanSupported,
 } from './actions'
 import { getSelectedSessionId } from './selectors'
 import { getDefaultSession, defaultQuery } from '../../constants'
@@ -82,6 +83,7 @@ export class Session extends Record(getDefaultSession('')) {
   currentQueryEndTime?: Date
 
   isReloadingSchema: boolean
+  isSchemaPendingUpdate: boolean
 
   responseExtensions: any
   queryVariablesActive: boolean
@@ -91,7 +93,8 @@ export class Session extends Record(getDefaultSession('')) {
   editorFlex: number
   variableEditorOpen: boolean
   variableEditorHeight: number
-  responseTracingOpen: boolean
+  isExtensionsDrawerOpen: boolean
+
   responseTracingHeight: number
   nextQueryStartTime?: Date
   tracingSupported?: boolean
@@ -141,10 +144,12 @@ export class ResponseRecord extends Record({
   resultID: '',
   date: '',
   time: new Date(),
+  isSchemaError: false,
 }) {
   resultID: string
   date: string
   time: Date
+  isSchemaError: boolean
 }
 
 function makeSession(endpoint = '') {
@@ -197,6 +202,7 @@ const reducer = handleActions(
       setVariableEditorHeight,
       setResponseTracingHeight,
       setTracingSupported,
+      setIsQueryPlanSupported,
       setVariableToType,
       setOperations,
       setOperationName,
@@ -221,25 +227,33 @@ const reducer = handleActions(
           undefined,
         )
     },
-    CLOSE_TRACING: (state, { payload: { responseTracingHeight } }) => {
+    CLOSE_TRACING: (state /* { payload: { responseTracingHeight } } */) => {
       return state.mergeDeepIn(
         ['sessions', getSelectedSessionId(state)],
-        Map({ responseTracingHeight, responseTracingOpen: false }),
+        Map({
+          // responseTracingHeight,
+          isExtensionsDrawerOpen: true,
+          isTracingActive: false,
+        }),
+      )
+    },
+    OPEN_TRACING: (state /* { payload: { responseTracingHeight } } */) => {
+      return state.mergeDeepIn(
+        ['sessions', getSelectedSessionId(state)],
+        Map({
+          // responseTracingHeight,
+          isExtensionsDrawerOpen: true,
+          isTracingActive: true,
+        }),
       )
     },
     TOGGLE_TRACING: state => {
       const path = [
         'sessions',
         getSelectedSessionId(state),
-        'responseTracingOpen',
+        'isExtensionsDrawerOpen',
       ]
       return state.setIn(path, !state.getIn(path))
-    },
-    OPEN_TRACING: (state, { payload: { responseTracingHeight } }) => {
-      return state.mergeDeepIn(
-        ['sessions', getSelectedSessionId(state)],
-        Map({ responseTracingHeight, responseTracingOpen: true }),
-      )
     },
     CLOSE_VARIABLES: (state, { payload: { variableEditorHeight } }) => {
       return state.mergeDeepIn(
@@ -300,31 +314,26 @@ const reducer = handleActions(
       return state
     },
     SCHEMA_FETCHING_SUCCESS: (state, { payload }) => {
-      const newSessions = state
-        .get('sessions')
-        .map((session: Session, sessionId) => {
-          if (session.endpoint === payload.endpoint) {
-            // if there was an error, clear it away
-            const data: any = {
-              tracingSupported: payload.tracingSupported,
-              isReloadingSchema: false,
-              endpointUnreachable: false,
-            }
-            const response = session.responses
-              ? session.responses!.first()
-              : null
-            if (
-              response &&
-              session.responses!.size === 1 &&
-              (response.date.includes('error') ||
-                response.date.includes('Failed to fetch'))
-            ) {
-              data.responses = List([])
-            }
-            return session.merge(Map(data))
+      const newSessions = state.get('sessions').map((session: Session) => {
+        if (session.endpoint === payload.endpoint) {
+          // if there was an error, clear it away
+          const data: any = {
+            tracingSupported: payload.tracingSupported,
+            isReloadingSchema: false,
+            endpointUnreachable: false,
           }
-          return session
-        })
+          const response = session.responses ? session.responses!.first() : null
+          if (
+            response &&
+            session.responses!.size === 1 &&
+            response.isSchemaError
+          ) {
+            data.responses = List([])
+          }
+          return session.merge(Map(data))
+        }
+        return session
+      })
       return state.set('sessions', newSessions)
     },
     SET_ENDPOINT_UNREACHABLE: (state, { payload }) => {
@@ -343,21 +352,28 @@ const reducer = handleActions(
     SCHEMA_FETCHING_ERROR: (state, { payload }) => {
       const newSessions = state.get('sessions').map((session, sessionId) => {
         if (session.get('endpoint') === payload.endpoint) {
+          let { responses } = session
+
+          // Only override the responses if there is one or zero and that one is a schemaError
+          // Don't override user's responses!
+          if (responses.size <= 1) {
+            let response = session.responses ? session.responses!.first() : null
+            if (!response || response.isSchemaError) {
+              response = new ResponseRecord({
+                resultID: cuid(),
+                isSchemaError: true,
+                date: JSON.stringify(formatError(payload.error, true), null, 2),
+                time: new Date(),
+              })
+            }
+            responses = List([response])
+          }
+
           return session.merge(
             Map({
               isReloadingSchema: false,
               endpointUnreachable: true,
-              responses: List([
-                new ResponseRecord({
-                  resultID: cuid(),
-                  date: JSON.stringify(
-                    formatError(payload.error, true),
-                    null,
-                    2,
-                  ),
-                  time: new Date(),
-                }),
-              ]),
+              responses,
             }),
           )
         }
@@ -447,7 +463,7 @@ const reducer = handleActions(
     // it makes sure, that there definitely is a tab open with the correct header
     INJECT_HEADERS: (state, { payload: { headers, endpoint } }) => {
       // if there are no headers to inject, there's nothing to do
-      if (!headers || headers === '') {
+      if (!headers || headers === '' || Object.keys(headers).length === 0) {
         return state
       }
       const headersString =

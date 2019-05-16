@@ -85,6 +85,8 @@ export interface EditorColours {
   executeButtonSubscriptionHover: string
   icon: string
   iconHover: string
+  pollingIcon: string
+  pollingIconShadow: string
   button: string
   buttonHover: string
   buttonText: string
@@ -92,6 +94,8 @@ export interface EditorColours {
   buttonWorkspaceHover: string
   buttonWorkspaceText: string
   circle: string
+  subscriptionTimeBoaderTop: string
+  subscriptionTimeText: string
 }
 
 export const darkColours: Colours = {
@@ -162,7 +166,6 @@ export const lightColours: Colours = {
   orange: 'rgba(241, 143, 1, 1)',
   blue: 'rgba(42, 126, 210, 1)',
   purple: 'rgb(164, 3, 111)',
-
   paleText: 'rgba(0, 0, 0, 0.5)',
   paleGrey: '#f3f4f4', // use for bgs, borders, etc
   lightGrey: '#eeeff0',
@@ -190,7 +193,6 @@ export const darkEditorColours: EditorColours = {
   ws: 'rgba(255, 255, 255, 0.4)',
   selection: 'rgba(255, 255, 255, 0.1)',
   cursorColor: 'rgba(255, 255, 255, 0.4)',
-
   text: '#fff',
   textInactive: 'rgba(255, 255, 255, 0.6)',
   background: '#09141c',
@@ -218,6 +220,8 @@ export const darkEditorColours: EditorColours = {
   executeButtonSubscriptionHover: '#f36c65',
   icon: 'rgb(74, 85, 95)',
   iconHover: 'rgba(255, 255, 255, 0.6)',
+  pollingIcon: 'rgba(139, 149, 156, 1)',
+  pollingIconShadow: 'rgba(139, 149, 156, 0.4)',
   button: '#0F202D',
   buttonHover: '#122535',
   buttonText: 'rgba(255,255,255,0.6)',
@@ -225,6 +229,8 @@ export const darkEditorColours: EditorColours = {
   buttonWorkspaceHover: '#a4acb2',
   buttonWorkspaceText: 'rgb(23, 42, 58)',
   circle: 'rgba(255, 255, 255, 0.4)',
+  subscriptionTimeBoaderTop: 'rgba(255, 255, 255, 0.2)',
+  subscriptionTimeText: 'rgba(255, 255, 255, 0.5)',
 }
 
 export const lightEditorColours: EditorColours = {
@@ -245,7 +251,6 @@ export const lightEditorColours: EditorColours = {
   ws: 'rgba(23, 42, 58, 0.8)', //
   selection: '#d1e9fd',
   cursorColor: 'rgba(0, 0, 0, 0.4)',
-
   text: 'rgba(0, 0, 0, 0.7)',
   textInactive: 'rgba(0, 0, 0, 0.3)',
   background: '#dbdee0',
@@ -273,6 +278,8 @@ export const lightEditorColours: EditorColours = {
   executeButtonSubscriptionHover: '#f36c65',
   icon: 'rgb(194, 200, 203)',
   iconHover: 'rgba(23, 42, 58, 0.6)',
+  pollingIcon: 'rgba(139, 149, 156, 1)',
+  pollingIconShadow: 'rgba(139, 149, 156, 0.4)',
   button: '#d8dbde',
   buttonHover: 'rgba(20, 37, 51, 0.2)',
   buttonText: 'rgba(23, 42, 58, 0.8)',
@@ -280,6 +287,8 @@ export const lightEditorColours: EditorColours = {
   buttonWorkspaceHover: 'rgb(157, 166, 173)',
   buttonWorkspaceText: 'rgb(238, 239, 240)',
   circle: 'rgba(23,42,58,.4)',
+  subscriptionTimeBoaderTop: 'rgba(23, 42, 58, 0.2)',
+  subscriptionTimeText: 'rgba(23, 42, 58, 0.5)',
 }
 
 export interface Sizes {

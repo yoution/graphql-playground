@@ -10,15 +10,15 @@
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/7zip/-/7zip-0.0.6.tgz#9cafb171af82329490353b4816f03347aa150a30"
 
-"@apollographql/graphql-playground-html@^1.6.17":
-  version "1.6.17"
-  resolved "https://registry.yarnpkg.com/@apollographql/graphql-playground-html/-/graphql-playground-html-1.6.17.tgz#26980e0441cfd32f870151696d51b61de9009423"
-  integrity sha512-VC9BNRAk7O0W0Uat33JLjISiGfQvD4cpXzc5XSQCpzdAufi+X6ZrzbNLgVtJ9Aj30VVCXcLlT0pkcKC5vDVA0A==
+"@apollographql/graphql-playground-html@^1.6.18":
+  version "1.6.18"
+  resolved "https://registry.yarnpkg.com/@apollographql/graphql-playground-html/-/graphql-playground-html-1.6.18.tgz#c0763b4b5a64d4a5316ae6adc2a3a61af58df402"
+  integrity sha512-7HGC1hQ0Aj93z2kv8h4RBtYClkiccj+F2Juh1m74Pky7D9tJDsQ4eBlaNNn0jMxGAL6EuaGwBN46EA9JtBMRog==
 
-"@apollographql/graphql-playground-react@1.7.24":
-  version "1.7.24"
-  resolved "https://registry.yarnpkg.com/@apollographql/graphql-playground-react/-/graphql-playground-react-1.7.24.tgz#ceb9861cf4371da1f652a3a982db95680911a926"
-  integrity sha512-j96L9QKiRhnBJCS15I3fwX9Ifhxk40Sj5DjPjps4rcj2cJLpqR2FPSsWII1ZafCszncxwam0HO4KFQvWKAbavQ==
+"@apollographql/graphql-playground-react@1.7.25":
+  version "1.7.25"
+  resolved "https://registry.yarnpkg.com/@apollographql/graphql-playground-react/-/graphql-playground-react-1.7.25.tgz#ab6d0f20d87113ac12f75ad8d05babdc91547e1b"
+  integrity sha512-01foiXCbWMPwtQJLo0NyVIJSB0tbVwhAhCUkoJWPOFBlzxEdJ5hNg0bc507J7tg9VW8LwGHLP92L41Oe4U0Zfw==
   dependencies:
     "@types/lru-cache" "^4.1.1"
     apollo-link "^1.0.7"
@@ -130,6 +130,11 @@
 "@types/classnames@2.2.3":
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@types/classnames/-/classnames-2.2.3.tgz#3f0ff6873da793870e20a260cada55982f38a9e5"
+
+"@types/lru-cache@^4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@types/lru-cache/-/lru-cache-4.1.1.tgz#b2d87a5e3df8d4b18ca426c5105cd701c2306d40"
+  integrity sha512-8mNEUG6diOrI6pMqOHrHPDBB1JsrpedeMK9AWGzVCQ7StRRribiT9BRvUmF8aUws9iBbVlgVekOT5Sgzc1MTKw==
 
 "@types/ms@^0.7.30":
   version "0.7.30"
@@ -3755,7 +3760,7 @@ graphql-config-extension-graphcool@1.0.8:
     graphcool-yml "0.4.15"
     graphql-config "^2.0.1"
 
-graphql-config-extension-prisma@^0.2.2:
+graphql-config-extension-prisma@^0.2.5:
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/graphql-config-extension-prisma/-/graphql-config-extension-prisma-0.2.5.tgz#f67db5b6f882ac76096fb2e68a18ec81c7d51fd2"
   dependencies:
@@ -3824,133 +3829,6 @@ graphql-language-service-utils@^1.2.2:
     graphql-config "2.0.1"
     graphql-language-service-types "^1.2.2"
 
-<<<<<<< HEAD
-graphql-playground-html@^1.6.0:
-  version "1.6.5"
-  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.6.5.tgz#0de1a68db891f7356312cf03dcf371d67388e95a"
-
-graphql-playground-react@^1.7.10:
-  version "1.7.10"
-  resolved "https://registry.yarnpkg.com/graphql-playground-react/-/graphql-playground-react-1.7.10.tgz#12e1f7397524e9c05db224ddb4215f5435a36654"
-  integrity sha512-AQbBlL3Gtyuw5hxS9QC67dIc1dj1uqEB6IrD5Lh7uuQ+i6jUVFlI+ACXsKEvNiRYldYUk4Lfa6fIXV9nPZkuHQ==
-  dependencies:
-    apollo-link "^1.0.7"
-    apollo-link-http "^1.3.2"
-    apollo-link-ws "1.0.8"
-    calculate-size "^1.1.1"
-    codemirror "^5.38.0"
-    codemirror-graphql timsuchanek/codemirror-graphql#details-fix
-    copy-to-clipboard "^3.0.8"
-    cryptiles "4.1.2"
-    cuid "^1.3.8"
-    graphiql "^0.11.2"
-    graphql "^0.11.7"
-    immutable "^4.0.0-rc.9"
-    isomorphic-fetch "^2.2.1"
-    js-yaml "^3.10.0"
-    json-stable-stringify "^1.0.1"
-    keycode "^2.1.9"
-    lodash "^4.17.11"
-    lodash.debounce "^4.0.8"
-    markdown-it "^8.4.1"
-    marked "^0.3.19"
-    prettier "^1.13.0"
-    prop-types "^15.6.0"
-    query-string "5"
-    react "^16.3.1"
-    react-addons-shallow-compare "^15.6.2"
-    react-codemirror "^1.0.0"
-    react-copy-to-clipboard "^5.0.1"
-    react-display-name "^0.2.3"
-    react-dom "^16.3.1"
-    react-helmet "^5.2.0"
-    react-input-autosize "^2.2.1"
-    react-modal "^3.1.11"
-    react-redux "^5.0.6"
-    react-router-dom "^4.2.2"
-    react-sortable-hoc "^0.8.3"
-    react-transition-group "^2.2.1"
-    react-virtualized "^9.12.0"
-    redux "^3.7.2"
-    redux-actions "^2.2.1"
-    redux-immutable "^4.0.0"
-    redux-localstorage rc
-    redux-localstorage-debounce "^0.1.0"
-    redux-localstorage-filter "^0.1.1"
-    redux-saga "^0.16.0"
-    reselect "^3.0.1"
-    seamless-immutable "^7.0.1"
-    styled-components "^4.0.0"
-    subscriptions-transport-ws "^0.9.5"
-    utility-types "^1.0.0"
-    webpack-bundle-analyzer "^2.9.2"
-    zen-observable "^0.7.1"
-
-||||||| parent of f93d93d... Fork and publish playground packages (#13)
-graphql-playground-html@^1.6.0:
-  version "1.6.5"
-  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.6.5.tgz#0de1a68db891f7356312cf03dcf371d67388e95a"
-
-graphql-playground-react@1.7.20:
-  version "1.7.20"
-  resolved "https://registry.yarnpkg.com/graphql-playground-react/-/graphql-playground-react-1.7.20.tgz#99f27fabbb9b24bb18cce2b62a5324567d7cdfb6"
-  integrity sha512-0l0z6/D4KhsleX4JKWM/1qiSa+g8s7nmUEn1pj52UmxzqRgDkEequbPEa3zMeeR+k1In89J1i7/YdhHuFNFICQ==
-  dependencies:
-    "@types/lru-cache" "^4.1.1"
-    apollo-link "^1.0.7"
-    apollo-link-http "^1.3.2"
-    apollo-link-ws "1.0.8"
-    calculate-size "^1.1.1"
-    codemirror "^5.38.0"
-    codemirror-graphql timsuchanek/codemirror-graphql#details-fix
-    copy-to-clipboard "^3.0.8"
-    cryptiles "4.1.2"
-    cuid "^1.3.8"
-    graphiql "^0.11.2"
-    graphql "^0.11.7"
-    immutable "^4.0.0-rc.9"
-    isomorphic-fetch "^2.2.1"
-    js-yaml "^3.10.0"
-    json-stable-stringify "^1.0.1"
-    keycode "^2.1.9"
-    lodash "^4.17.11"
-    lodash.debounce "^4.0.8"
-    markdown-it "^8.4.1"
-    marked "^0.3.19"
-    prettier "^1.13.0"
-    prop-types "^15.6.0"
-    query-string "5"
-    react "^16.3.1"
-    react-addons-shallow-compare "^15.6.2"
-    react-codemirror "^1.0.0"
-    react-copy-to-clipboard "^5.0.1"
-    react-display-name "^0.2.3"
-    react-dom "^16.3.1"
-    react-helmet "^5.2.0"
-    react-input-autosize "^2.2.1"
-    react-modal "^3.1.11"
-    react-redux "^5.0.6"
-    react-router-dom "^4.2.2"
-    react-sortable-hoc "^0.8.3"
-    react-transition-group "^2.2.1"
-    react-virtualized "^9.12.0"
-    redux "^3.7.2"
-    redux-actions "^2.2.1"
-    redux-immutable "^4.0.0"
-    redux-localstorage rc
-    redux-localstorage-debounce "^0.1.0"
-    redux-localstorage-filter "^0.1.1"
-    redux-saga "^0.16.0"
-    reselect "^3.0.1"
-    seamless-immutable "^7.0.1"
-    styled-components "^4.0.0"
-    subscriptions-transport-ws "^0.9.5"
-    utility-types "^1.0.0"
-    webpack-bundle-analyzer "^2.9.2"
-    zen-observable "^0.7.1"
-
-=======
->>>>>>> f93d93d... Fork and publish playground packages (#13)
 graphql-request@^1.5.0:
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/graphql-request/-/graphql-request-1.8.2.tgz#398d10ae15c585676741bde3fc01d5ca948f8fbe"

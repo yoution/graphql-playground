@@ -7,7 +7,7 @@ import {
   put,
 } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
-import { getSelectedSession } from './selectors'
+import { getSelectedSession, getIsPollingSchema } from './selectors'
 import getSelectedOperationName from '../../components/Playground/util/getSelectedOperationName'
 import { getQueryFacts } from '../../components/Playground/util/getQueryFacts'
 import { fromJS, is } from 'immutable'
@@ -18,10 +18,13 @@ import {
   setOperationName,
   schemaFetchingSuccess,
   schemaFetchingError,
-  fetchSchema,
+  // fetchSchema,
   runQuery,
   setTracingSupported,
   setQueryTypes,
+  refetchSchema,
+  fetchSchema,
+  setIsQueryPlanSupported,
 } from './actions'
 import { getRootMap, getNewStack } from '../../components/Playground/util/stack'
 import { DocsSessionState } from '../docs/reducers'
@@ -137,9 +140,16 @@ function* getSessionWithCredentials() {
 
 function* fetchSchemaSaga() {
   const session: Session = yield getSessionWithCredentials()
-  yield schemaFetcher.fetch(session)
   try {
-    yield put(schemaFetchingSuccess(session.endpoint))
+    yield schemaFetcher.fetch(session)
+    yield put(
+      schemaFetchingSuccess(
+        session.endpoint,
+        null,
+        null,
+        yield select(getIsPollingSchema),
+      ),
+    )
   } catch (e) {
     yield put(schemaFetchingError(session.endpoint))
     yield call(delay, 5000)
@@ -149,29 +159,41 @@ function* fetchSchemaSaga() {
 
 function* refetchSchemaSaga() {
   const session: Session = yield getSessionWithCredentials()
-  yield schemaFetcher.refetch(session)
   try {
-    yield put(schemaFetchingSuccess(session.endpoint))
+    yield schemaFetcher.refetch(session)
+    yield put(
+      schemaFetchingSuccess(
+        session.endpoint,
+        null,
+        null,
+        yield select(getIsPollingSchema),
+      ),
+    )
   } catch (e) {
     yield put(schemaFetchingError(session.endpoint))
     yield call(delay, 5000)
-    yield put(fetchSchema())
+    yield put(refetchSchema())
   }
 }
+
+let lastSchema
 
 function* renewStacks() {
   const session: Session = yield select(getSelectedSession)
   const fetchSession = yield getSessionWithCredentials()
   const docs: DocsSessionState = yield select(getSessionDocsState)
   const result = yield schemaFetcher.fetch(fetchSession)
-  const { schema, tracingSupported } = result
-  if (schema) {
+  const { schema, tracingSupported, isQueryPlanSupported } = result
+
+  if (schema && (!lastSchema || lastSchema !== schema)) {
     const rootMap = getRootMap(schema)
     const stacks = docs.navStack
       .map(stack => getNewStack(rootMap, schema, stack))
       .filter(s => s)
     yield put(setStacks(session.id, stacks))
     yield put(setTracingSupported(tracingSupported))
+    yield put(setIsQueryPlanSupported(isQueryPlanSupported))
+    lastSchema = schema
   }
 }
 
@@ -192,10 +214,14 @@ function* prettifyQuery() {
   const { query } = yield select(getSelectedSession)
   const settings = yield select(getSettings)
   try {
-    const prettyQuery = prettify(query, settings['prettier.printWidth'])
+    const prettyQuery = prettify(query, {
+      printWidth: settings['prettier.printWidth'],
+      tabWidth: settings['prettier.tabWidth'],
+      useTabs: settings['prettier.useTabs'],
+    })
     yield put(editQuery(prettyQuery))
   } catch (e) {
-    // TODO show erros somewhere
+    // TODO show errors somewhere
     // tslint:disable-next-line
     console.log(e)
   }

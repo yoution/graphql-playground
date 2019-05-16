@@ -37,6 +37,7 @@ import {
   getHeaders,
   getIsReloadingSchema,
   getEndpoint,
+  getIsPollingSchema,
 } from '../state/sessions/selectors'
 import { getHistoryOpen } from '../state/general/selectors'
 import {
@@ -49,6 +50,7 @@ import { getWorkspaceId } from './Playground/util/getWorkspaceId'
 import { getSettings, getSettingsString } from '../state/workspace/reducers'
 import { Backoff } from './Playground/util/fibonacci-backoff'
 import { debounce } from 'lodash'
+import { cachedPrintSchema } from './util'
 
 export interface Response {
   resultID: string
@@ -62,7 +64,7 @@ export interface Props {
   subscriptionEndpoint?: string
   projectId?: string
   shareEnabled?: boolean
-  adminAuthToken?: string
+  fixedEndpoint?: boolean
   onSuccess?: (graphQLParams: any, response: any) => void
   isEndpoint?: boolean
   isApp?: boolean
@@ -84,7 +86,10 @@ export interface Props {
   fixedEndpoints: boolean
   headers?: any
   configPath?: string
-  createApolloLink?: (session: Session) => ApolloLink
+  createApolloLink?: (
+    session: Session,
+    subscriptionEndpoint?: string,
+  ) => ApolloLink
   workspaceName?: string
   schema?: GraphQLSchema
 }
@@ -102,8 +107,14 @@ export interface ReduxProps {
   injectHeaders: (headers: string, endpoint: string) => void
   setConfigString: (str: string) => void
   schemaFetchingError: (endpoint: string, error: string) => void
-  schemaFetchingSuccess: (endpoint: string, tracingSupported: boolean) => void
+  schemaFetchingSuccess: (
+    endpoint: string,
+    tracingSupported: boolean,
+    isQueryPlanSupported: boolean,
+    isPollingSchema: boolean,
+  ) => void
   isReloadingSchema: boolean
+  isPollingSchema: boolean
   isConfigTab: boolean
   isSettingsTab: boolean
   isFile: boolean
@@ -140,7 +151,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
       if (props.schema) {
         return
       }
-      if (this.mounted && this.state.schema) {
+      if (this.mounted && this.state.schema && !props.isPollingSchema) {
         this.setState({ schema: undefined })
       }
       let first = true
@@ -164,6 +175,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   private backoff: Backoff
   private initialIndex: number = -1
   private mounted = false
+  private initialSchemaFetch = true
 
   constructor(props: Props & ReduxProps) {
     super(props)
@@ -240,6 +252,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
   async schemaGetter(propsInput?: Props & ReduxProps) {
     const props = this.props || propsInput
     const endpoint = props.sessionEndpoint || props.endpoint
+    const currentSchema = this.state.schema
     try {
       const data = {
         endpoint,
@@ -255,12 +268,20 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
           data.endpoint === this.props.endpoint ||
           data.endpoint === this.props.sessionEndpoint
         ) {
-          this.setState({ schema: newSchema })
+          this.updateSchema(currentSchema, newSchema, props)
         }
       })
       if (schema) {
-        this.setState({ schema: schema.schema })
-        this.props.schemaFetchingSuccess(data.endpoint, schema.tracingSupported)
+        this.updateSchema(currentSchema, schema.schema, props)
+        if (this.initialSchemaFetch) {
+          this.props.schemaFetchingSuccess(
+            data.endpoint,
+            schema.tracingSupported,
+            schema.isQueryPlanSupported,
+            props.isPollingSchema,
+          )
+          this.initialSchemaFetch = false
+        }
         this.backoff.stop()
       }
     } catch (e) {
@@ -294,6 +315,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
             ) : (
               <GraphQLEditor
                 shareEnabled={this.props.shareEnabled}
+                fixedEndpoint={this.props.fixedEndpoint}
                 schema={this.state.schema}
               />
             )}
@@ -346,6 +368,26 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     )
   }
 
+  private updateSchema(
+    currentSchema: GraphQLSchema | undefined,
+    newSchema: GraphQLSchema,
+    props: Readonly<{ children?: React.ReactNode }> &
+      Readonly<Props & ReduxProps>,
+  ) {
+    // first check for reference equality
+    if (currentSchema !== newSchema) {
+      // if references are not equal, do an equality check on the printed schema
+      const currentSchemaStr = currentSchema
+        ? cachedPrintSchema(currentSchema)
+        : null
+      const newSchemaStr = cachedPrintSchema(newSchema)
+
+      if (newSchemaStr !== currentSchemaStr || !props.isPollingSchema) {
+        this.setState({ schema: newSchema })
+      }
+    }
+  }
+
   get httpApiPrefix() {
     return this.props.endpoint.match(/(https?:\/\/.*?)\/?/)![1]
   }
@@ -361,6 +403,7 @@ const mapStateToProps = createStructuredSelector({
   settings: getSettings,
   settingsString: getSettingsString,
   isReloadingSchema: getIsReloadingSchema,
+  isPollingSchema: getIsPollingSchema,
   sessionEndpoint: getEndpoint,
 })
 
