@@ -52,6 +52,7 @@ import {
   getOperationName,
   getHeadersCount,
   getSelectedSessionIdFromRoot,
+  getIsQueryPlanSupported,
 } from '../../state/sessions/selectors'
 import {
   updateQueryFacts,
@@ -118,6 +119,7 @@ export interface ReduxProps {
   operationName: string
   query: string
   sessionId: string
+  isQueryPlanSupported: boolean
 }
 
 export interface SimpleProps {
@@ -269,15 +271,18 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
                   >
                     Tracing
                   </DrawerTab>
-                  <DrawerTab
-                    isActive={!this.props.isTracingActive}
-                    ref={this.setQueryPlanRef}
-                    onClick={this.props.closeTracing}
-                  >
-                    Query Plan
-                  </DrawerTab>
+                  {this.props.isQueryPlanSupported && (
+                    <DrawerTab
+                      isActive={!this.props.isTracingActive}
+                      ref={this.setQueryPlanRef}
+                      onClick={this.props.closeTracing}
+                    >
+                      Query Plan
+                    </DrawerTab>
+                  )}
                 </ExtensionsDrawerTitle>
-                {this.props.isTracingActive ? (
+                {this.props.isTracingActive ||
+                !this.props.isQueryPlanSupported ? (
                   <ResponseTracing open={true} />
                 ) : (
                   <QueryPlan />
@@ -625,6 +630,7 @@ const mapStateToProps = createStructuredSelector({
   operationName: getOperationName,
   headersCount: getHeadersCount,
   sessionId: getSelectedSessionIdFromRoot,
+  isQueryPlanSupported: getIsQueryPlanSupported,
 })
 
 export default // TODO fix redux types
