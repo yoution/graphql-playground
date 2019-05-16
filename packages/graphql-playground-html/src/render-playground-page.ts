@@ -67,7 +67,7 @@ export interface Tab {
 
 const loading = getLoadingMarkup()
 
-const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm' }) => `
+const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm/@apollographql' }) => `
     <link rel="stylesheet" href="${cdnUrl}/graphql-playground-react${version
   ? `@${version}`
   : ''}/build/static/css/index.css" />
