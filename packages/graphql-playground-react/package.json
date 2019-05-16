@@ -1,6 +1,6 @@
 {
   "name": "@apollographql/graphql-playground-react",
-  "version": "1.7.24",
+  "version": "1.7.25",
   "main": "./lib/lib.js",
   "typings": "./lib/lib.d.ts",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
@@ -43,7 +43,7 @@
     }
   ],
   "devDependencies": {
-    "@apollographql/graphql-playground-html": "^1.6.17",
+    "@apollographql/graphql-playground-html": "^1.6.18",
     "@types/deasync": "0.1.0",
     "@types/jest": "22.2.3",
     "@types/node": "10.1.4",

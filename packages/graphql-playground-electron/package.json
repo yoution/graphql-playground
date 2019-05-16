@@ -4,7 +4,7 @@
   "homepage": "https://github.com/graphcool/graphql-playground",
   "repository": "graphcool/graphql-playground",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration)",
-  "version": "1.8.11",
+  "version": "1.8.12",
   "author": {
     "name": "Graphcool",
     "email": "hello@graph.cool",
@@ -82,8 +82,8 @@
     "test-quick"
   ],
   "dependencies": {
-    "@apollographql/graphql-playground-html": "^1.6.17",
-    "@apollographql/graphql-playground-react": "1.7.24",
+    "@apollographql/graphql-playground-html": "^1.6.18",
+    "@apollographql/graphql-playground-react": "1.7.25",
     "@types/ms": "^0.7.30",
     "classnames": "^2.2.5",
     "date-fns": "^1.29.0",

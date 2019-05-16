@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@apollographql/graphql-playground-html@^1.6.17":
-  version "1.6.17"
-  resolved "https://registry.yarnpkg.com/@apollographql/graphql-playground-html/-/graphql-playground-html-1.6.17.tgz#26980e0441cfd32f870151696d51b61de9009423"
-  integrity sha512-VC9BNRAk7O0W0Uat33JLjISiGfQvD4cpXzc5XSQCpzdAufi+X6ZrzbNLgVtJ9Aj30VVCXcLlT0pkcKC5vDVA0A==
+"@apollographql/graphql-playground-html@^1.6.18":
+  version "1.6.18"
+  resolved "https://registry.yarnpkg.com/@apollographql/graphql-playground-html/-/graphql-playground-html-1.6.18.tgz#c0763b4b5a64d4a5316ae6adc2a3a61af58df402"
+  integrity sha512-7HGC1hQ0Aj93z2kv8h4RBtYClkiccj+F2Juh1m74Pky7D9tJDsQ4eBlaNNn0jMxGAL6EuaGwBN46EA9JtBMRog==
 
 "@babel/code-frame@^7.0.0-beta.35":
   version "7.0.0-beta.37"

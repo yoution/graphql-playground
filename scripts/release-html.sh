@@ -32,3 +32,12 @@ do
   yarn publish --non-interactive --access public
   cd ..
 done
+
+# Update dependents
+# Note: React has html as a dev dependency
+cd graphql-playground-electron
+yarn add @apollographql/graphql-playground-html@$version
+cd ..
+cd graphql-playground-react
+yarn add -D @apollographql/graphql-playground-html@$version
+
