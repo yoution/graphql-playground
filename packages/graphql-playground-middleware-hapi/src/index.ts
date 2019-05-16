@@ -3,7 +3,7 @@ import {
   MiddlewareOptions,
   RenderPageOptions,
   renderPlaygroundPage,
-} from 'graphql-playground-html'
+} from '@apollographql/graphql-playground-html'
 
 const pkg = require('../package.json')
 
