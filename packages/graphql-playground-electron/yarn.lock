@@ -15,10 +15,10 @@
   resolved "https://registry.yarnpkg.com/@apollographql/graphql-playground-html/-/graphql-playground-html-1.6.18.tgz#c0763b4b5a64d4a5316ae6adc2a3a61af58df402"
   integrity sha512-7HGC1hQ0Aj93z2kv8h4RBtYClkiccj+F2Juh1m74Pky7D9tJDsQ4eBlaNNn0jMxGAL6EuaGwBN46EA9JtBMRog==
 
-"@apollographql/graphql-playground-react@1.7.25":
-  version "1.7.25"
-  resolved "https://registry.yarnpkg.com/@apollographql/graphql-playground-react/-/graphql-playground-react-1.7.25.tgz#ab6d0f20d87113ac12f75ad8d05babdc91547e1b"
-  integrity sha512-01foiXCbWMPwtQJLo0NyVIJSB0tbVwhAhCUkoJWPOFBlzxEdJ5hNg0bc507J7tg9VW8LwGHLP92L41Oe4U0Zfw==
+"@apollographql/graphql-playground-react@1.7.27":
+  version "1.7.27"
+  resolved "https://registry.yarnpkg.com/@apollographql/graphql-playground-react/-/graphql-playground-react-1.7.27.tgz#9e667723031ea5e1d43321236dc50ccdf02790b1"
+  integrity sha512-ZKp8ZfkxyuJ55U3Ap9T5yq6KMiksUD1Y+bqiZj2O2zBYmBtTJKsBOq9CxwDsDZAXK8STc/Zen56+8RNniFMTSg==
   dependencies:
     "@types/lru-cache" "^4.1.1"
     apollo-link "^1.0.7"
@@ -70,7 +70,7 @@
     styled-components "^4.0.0"
     subscriptions-transport-ws "^0.9.5"
     utility-types "^1.0.0"
-    webpack-bundle-analyzer "^2.9.2"
+    webpack-bundle-analyzer "^3.3.2"
     zen-observable "^0.7.1"
 
 "@babel/code-frame@^7.0.0-beta.35":
@@ -223,7 +223,7 @@ acorn@^4.0.3:
   version "4.0.13"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-4.0.13.tgz#105495ae5361d697bd195c825192e1ad7f253787"
 
-acorn@^5.0.0, acorn@^5.3.0, acorn@^5.5.3:
+acorn@^5.0.0, acorn@^5.5.3:
   version "5.7.3"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.3.tgz#67aa231bf8812974b85235a96771eb6bd07ea279"
 
@@ -1470,14 +1470,6 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bfj-node4@^5.2.0:
-  version "5.3.1"
-  resolved "https://registry.yarnpkg.com/bfj-node4/-/bfj-node4-5.3.1.tgz#e23d8b27057f1d0214fc561142ad9db998f26830"
-  dependencies:
-    bluebird "^3.5.1"
-    check-types "^7.3.0"
-    tryer "^1.0.0"
-
 bfj@^6.1.1:
   version "6.1.1"
   resolved "https://registry.yarnpkg.com/bfj/-/bfj-6.1.1.tgz#05a3b7784fbd72cfa3c22e56002ef99336516c48"
@@ -2090,7 +2082,7 @@ commander@2.6.0:
   version "2.6.0"
   resolved "http://registry.npmjs.org/commander/-/commander-2.6.0.tgz#9df7e52fb2a0cb0fb89058ee80c3104225f37e1d"
 
-commander@^2.11.0, commander@^2.12.1, commander@^2.13.0, commander@^2.14.1, commander@^2.9.0:
+commander@^2.11.0, commander@^2.12.1, commander@^2.14.1, commander@^2.9.0:
   version "2.19.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.19.0.tgz#f6198aa84e5b83c46054b94ddedbfed5ee9ff12a"
 
@@ -2808,7 +2800,7 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
-ejs@^2.5.7, ejs@^2.6.1:
+ejs@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.6.1.tgz#498ec0d495655abc6f23cd61868d926464071aa0"
 
@@ -3422,7 +3414,7 @@ filename-regex@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/filename-regex/-/filename-regex-2.0.1.tgz#c1c4b9bee3e09725ddb106b75c1e301fe2f18b26"
 
-filesize@^3.5.11, filesize@^3.6.1:
+filesize@^3.6.1:
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/filesize/-/filesize-3.6.1.tgz#090bb3ee01b6f801a8a8be99d31710b3422bb317"
 
@@ -3860,13 +3852,6 @@ graphql@0.13.2, graphql@^0.11.7, graphql@^0.13.2:
   resolved "http://registry.npmjs.org/graphql/-/graphql-0.13.2.tgz#4c740ae3c222823e7004096f832e7b93b2108270"
   dependencies:
     iterall "^1.2.1"
-
-gzip-size@^4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/gzip-size/-/gzip-size-4.1.0.tgz#8ae096257eabe7d69c45be2b67c448124ffb517c"
-  dependencies:
-    duplexer "^0.1.1"
-    pify "^3.0.0"
 
 gzip-size@^5.0.0:
   version "5.1.0"
@@ -5904,7 +5889,7 @@ open@0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/open/-/open-0.0.5.tgz#42c3e18ec95466b6bf0dc42f3a2945c3f0cad8fc"
 
-opener@^1.4.3, opener@^1.5.1:
+opener@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/opener/-/opener-1.5.1.tgz#6d2f0e77f1a0af0032aca716c2c1fbb8e7e8abed"
 
@@ -8653,7 +8638,7 @@ webidl-conversions@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-4.0.2.tgz#a855980b1f0b6b359ba1d5d9fb39ae941faa63ad"
 
-webpack-bundle-analyzer@3.3.2:
+webpack-bundle-analyzer@3.3.2, webpack-bundle-analyzer@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-3.3.2.tgz#3da733a900f515914e729fcebcd4c40dde71fc6f"
   integrity sha512-7qvJLPKB4rRWZGjVp5U1KEjwutbDHSKboAl0IfafnrdXMrgC0tOtZbQD6Rw0u4cmpgRN4O02Fc0t8eAT+FgGzA==
@@ -8671,23 +8656,6 @@ webpack-bundle-analyzer@3.3.2:
     mkdirp "^0.5.1"
     opener "^1.5.1"
     ws "^6.0.0"
-
-webpack-bundle-analyzer@^2.9.2:
-  version "2.13.1"
-  resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-2.13.1.tgz#07d2176c6e86c3cdce4c23e56fae2a7b6b4ad526"
-  dependencies:
-    acorn "^5.3.0"
-    bfj-node4 "^5.2.0"
-    chalk "^2.3.0"
-    commander "^2.13.0"
-    ejs "^2.5.7"
-    express "^4.16.2"
-    filesize "^3.5.11"
-    gzip-size "^4.1.0"
-    lodash "^4.17.4"
-    mkdirp "^0.5.1"
-    opener "^1.4.3"
-    ws "^4.0.0"
 
 webpack-core@^0.6.8:
   version "0.6.9"
@@ -8906,13 +8874,6 @@ write-file-atomic@^2.0.0:
     graceful-fs "^4.1.11"
     imurmurhash "^0.1.4"
     signal-exit "^3.0.2"
-
-ws@^4.0.0:
-  version "4.1.0"
-  resolved "http://registry.npmjs.org/ws/-/ws-4.1.0.tgz#a979b5d7d4da68bf54efe0408967c324869a7289"
-  dependencies:
-    async-limiter "~1.0.0"
-    safe-buffer "~5.1.0"
 
 ws@^5.2.0:
   version "5.2.2"
