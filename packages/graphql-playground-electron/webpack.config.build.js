@@ -9,7 +9,7 @@ const fs = require('fs')
 const UglifyJSParallelPlugin = require('webpack-uglify-parallel')
 const {
   renderPlaygroundPage,
-} = require('@apollo/@apollographql/graphql-playground-html')
+} = require('@apollographql/graphql-playground-html')
 
 const appEntrypoint = 'src/renderer/index.html'
 
