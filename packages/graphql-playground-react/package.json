@@ -84,7 +84,7 @@
     "object-assign": "4.1.1",
     "promise": "8.0.1",
     "raw-loader": "0.5.1",
-    "react-dev-utils": "5.0.1",
+    "react-dev-utils": "5.0.2",
     "recursive-readdir": "2.2.2",
     "rimraf": "2.6.2",
     "source-map-loader": "0.2.3",
@@ -155,7 +155,7 @@
     "styled-components": "^4.0.0",
     "subscriptions-transport-ws": "^0.9.5",
     "utility-types": "^1.0.0",
-    "webpack-bundle-analyzer": "^2.9.2",
+    "webpack-bundle-analyzer": "^3.3.2",
     "zen-observable": "^0.7.1"
   },
   "lint-staged": {
