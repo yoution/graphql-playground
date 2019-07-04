@@ -12,7 +12,7 @@ import { examples } from './data'
 import {
   getAppHistory,
   AppHistoryItem,
-} from '@apollographql/@apollographql/graphql-playground-react'
+} from '@apollographql/graphql-playground-react'
 import { createStructuredSelector, createSelector } from 'reselect'
 import { OrderedMap } from 'immutable'
 
