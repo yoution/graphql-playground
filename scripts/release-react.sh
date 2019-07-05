@@ -52,4 +52,4 @@ curl -X POST \
 #echo "Updating dependency & version in @apollographql/graphql-playground-electron..."
 #yarn add @apollographql/graphql-playground-react@$version
 #yarn version --no-git-tag-version --new-version patch
-cd ..
+#cd ..

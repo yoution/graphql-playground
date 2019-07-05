@@ -23,6 +23,9 @@ yarn publish --non-interactive --access public
 version=$(cat package.json | jq -r '.version')
 cd ..
 
+echo "Sleeping for 15 seconds to wait for registry updates..."
+sleep 15
+
 #for middleware in "${middlewares[@]}"
 #do
 #  cd $middleware
