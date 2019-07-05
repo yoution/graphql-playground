@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@apollographql/graphql-playground-html@^1.6.18":
-  version "1.6.18"
-  resolved "https://registry.yarnpkg.com/@apollographql/graphql-playground-html/-/graphql-playground-html-1.6.18.tgz#c0763b4b5a64d4a5316ae6adc2a3a61af58df402"
-  integrity sha512-7HGC1hQ0Aj93z2kv8h4RBtYClkiccj+F2Juh1m74Pky7D9tJDsQ4eBlaNNn0jMxGAL6EuaGwBN46EA9JtBMRog==
+"@apollographql/graphql-playground-html@^1.6.23":
+  version "1.6.23"
+  resolved "https://registry.yarnpkg.com/@apollographql/graphql-playground-html/-/graphql-playground-html-1.6.23.tgz#7524496eaf4d51aea9b8b01436fabc479a6fb7d6"
+  integrity sha512-Ugtgt4FkBDbDsuEtNrFCkkVhUfK0ImLlwCMSghIorFthXu0LoTXQjJnukEC28KSRF+YeFjVAztaqtEWRSeWFMw==
 
 "@babel/code-frame@^7.0.0-beta.35":
   version "7.0.0-beta.37"
@@ -1571,7 +1571,7 @@ chalk@2.1.0:
     escape-string-regexp "^1.0.5"
     supports-color "^4.0.0"
 
-chalk@2.4.1, chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0, chalk@^2.3.0:
+chalk@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.1.tgz#18c49ab16a037b6eb0152cc83e3471338215b66e"
   dependencies:
@@ -1595,7 +1595,7 @@ chalk@^2.4.1:
     ansi-styles "^3.2.1"
     escape-string-regexp "^1.0.5"
     supports-color "^5.3.0"
-    
+
 chardet@^0.4.0:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.4.2.tgz#b5473b33dc97c424e5d98dc87d55d4d8a29c8bf2"

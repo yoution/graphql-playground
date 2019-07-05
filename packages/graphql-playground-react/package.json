@@ -43,7 +43,7 @@
     }
   ],
   "devDependencies": {
-    "@apollographql/graphql-playground-html": "^1.6.18",
+    "@apollographql/graphql-playground-html": "^1.6.23",
     "@types/deasync": "0.1.0",
     "@types/jest": "22.2.3",
     "@types/node": "10.1.4",
