@@ -48,8 +48,8 @@ curl -X POST \
 #   cd ..
 # done
 
-cd graphql-playground-electron
-echo "Updating dependency & version in @apollographql/graphql-playground-electron..."
-yarn add @apollographql/graphql-playground-react@$version
-yarn version --no-git-tag-version --new-version patch
+#cd graphql-playground-electron
+#echo "Updating dependency & version in @apollographql/graphql-playground-electron..."
+#yarn add @apollographql/graphql-playground-react@$version
+#yarn version --no-git-tag-version --new-version patch
 cd ..
