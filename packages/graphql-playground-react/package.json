@@ -1,6 +1,6 @@
 {
   "name": "@apollographql/graphql-playground-react",
-  "version": "1.7.30",
+  "version": "1.7.31",
   "main": "./lib/lib.js",
   "typings": "./lib/lib.d.ts",
   "description": "GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration).",
