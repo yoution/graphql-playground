@@ -84,7 +84,7 @@ export class QueryPlanViewer extends React.Component<Props, {}> {
   }
 
   render() {
-    return this.props.isQueryPlanSupported ? (
+    return this.props.isQueryPlanSupported || this.props.value ? (
       <QueryPlanCodeMirror ref={this.setRef} />
     ) : (
       <NotSupported>

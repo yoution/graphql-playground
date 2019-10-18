@@ -16,7 +16,7 @@ import {
 import Spinner from '../Spinner'
 import Results from './Results'
 import ResponseTracing from './ResponseTracing'
-import { QueryPlan } from './QueryPlan'
+// import { QueryPlan } from './QueryPlan'
 
 import { fillLeafs } from 'graphiql/dist/utility/fillLeafs'
 import { getLeft, getTop } from 'graphiql/dist/utility/elementPosition'
@@ -72,6 +72,7 @@ import {
 import { ResponseRecord } from '../../state/sessions/reducers'
 import { getDocsOpen } from '../../state/docs/selectors'
 import { changeWidthDocs } from '../../state/docs/actions'
+import { QueryPlanVisualizer } from './QueryPlanVisualizer'
 
 /**
  * The top-level React component for GraphQLEditor, intended to encompass the entire
@@ -287,7 +288,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
                 {this.props.isTracingActive ? (
                   <ResponseTracing />
                 ) : (
-                  <QueryPlan />
+                  <QueryPlanVisualizer />
                 )}
               </ExtensionsDrawer>
             </ResultWrap>
