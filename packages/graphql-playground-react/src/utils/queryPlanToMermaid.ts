@@ -124,20 +124,35 @@ function process(
 }
 
 export function queryPlanToMermaid(serializedQueryPlan: string) {
-  const queryPlan: QueryPlan = JSON.parse(serializedQueryPlan)
+  if (!serializedQueryPlan) return
+
+  let queryPlan: QueryPlan
+  try {
+    queryPlan = JSON.parse(serializedQueryPlan)
+  } catch (error) {
+    console.error('Unable to parse queryPlan')
+    console.dir(serializedQueryPlan)
+    console.dir(error)
+    return
+  }
 
   console.dir(queryPlan)
   const rootNodeHash = hash()
-  const graphSyntaxObjects: nodeFormatterOutput = process(queryPlan.node)({
-    lastNodeHash: rootNodeHash,
-    currentNode: queryPlan.node,
-  })
-  const graphOutput = `
-    graph LR
-        ${rootNodeHash}['Query Plan']
-        ${graphSyntaxObjects.mermaid}
-    `
+  try {
+    const graphSyntaxObjects: nodeFormatterOutput = process(queryPlan.node)({
+      lastNodeHash: rootNodeHash,
+      currentNode: queryPlan.node,
+    })
+    const graphOutput = `
+      graph LR
+          ${rootNodeHash}['Query Plan']
+          ${graphSyntaxObjects.mermaid}
+      `
 
-  console.dir(graphOutput)
-  return graphOutput
+    console.dir(graphOutput)
+    return graphOutput
+  } catch (error) {
+    console.error(error)
+    return ''
+  }
 }

@@ -21,7 +21,15 @@ export class QueryPlanVis extends React.Component<Props, {}> {
 
   componentDidMount() {
     console.dir(mermaid)
-    mermaid ? mermaid.initialize({ startOnLoad: true }) : true
+    mermaid
+      ? mermaid.initialize({
+          startOnLoad: false,
+          theme: 'default',
+          flowchart: {
+            curve: 'basis',
+          },
+        })
+      : true
   }
 
   shouldComponentUpdate(nextProps) {
@@ -32,10 +40,11 @@ export class QueryPlanVis extends React.Component<Props, {}> {
     // const value = this.props.value || '';
 
     const graphDefinition = queryPlanToMermaid(this.props.value)
-
-    mermaid.render('theGraph', graphDefinition, svgCode => {
-      this.node.innerHTML = svgCode
-    })
+    if (graphDefinition) {
+      mermaid.render('theGraph', graphDefinition, svgCode => {
+        this.node.innerHTML = svgCode
+      })
+    }
   }
 
   componentWillUnmount() {}
