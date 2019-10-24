@@ -72,6 +72,34 @@ const nodeFormatters = {
 
     return { lastNodeHash: thisNodeHash, mermaid }
   },
+  Parallel: ({
+    lastNodeHash,
+    currentNode,
+  }: nodeFormatterInput): nodeFormatterOutput => {
+    // Sequence handles child nodes by passing the last node to each of the subsequent
+    // nodes.
+    let mermaid = ''
+    const thisNodeHash = hash()
+
+    // Setup our node in Mermaid, then link to the previous graph node
+    mermaid = `
+            ${thisNodeHash}["Parallel"]
+            ${lastNodeHash} --> ${thisNodeHash}
+            `
+
+    // For each of the `nodes`, process and format, using the previous hash instead of the root
+    // let tieToPreviousHash = thisNodeHash;
+    ;(currentNode as SequenceNode).nodes.forEach((current: PlanNode) => {
+      const nextNode = process(current)({
+        lastNodeHash: thisNodeHash,
+        currentNode: current,
+      })
+      // tieToPreviousHash = nextNode.lastNodeHash
+      mermaid += nextNode.mermaid
+    })
+
+    return { lastNodeHash: thisNodeHash, mermaid }
+  },
   Fetch: ({
     lastNodeHash,
     currentNode,
@@ -120,12 +148,18 @@ function hash(): string {
 function process(
   currentNode: PlanNode,
 ): ({ lastNodeHash, currentNode }: nodeFormatterInput) => nodeFormatterOutput {
-  return nodeFormatters[currentNode.kind] || []
+  return (
+    nodeFormatters[currentNode.kind] ||
+    (() => {
+      throw new Error(`Unknown processor for type ${currentNode.kind}`)
+    })
+  )
 }
 
 export function queryPlanToMermaid(serializedQueryPlan: string) {
   if (!serializedQueryPlan) return
 
+  // TODO: Adjust Flatten and Fetch to be visualized in opposite order (fetch is a dependency of flatten, of course)
   let queryPlan: QueryPlan
   try {
     queryPlan = JSON.parse(serializedQueryPlan)
@@ -147,6 +181,7 @@ export function queryPlanToMermaid(serializedQueryPlan: string) {
       graph LR
           ${rootNodeHash}['Query Plan']
           ${graphSyntaxObjects.mermaid}
+          ${graphSyntaxObjects.lastNodeHash} --> response(Response)
       `
 
     console.dir(graphOutput)
