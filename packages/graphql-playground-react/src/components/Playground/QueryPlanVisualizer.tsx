@@ -74,8 +74,9 @@ export class QueryPlanVis extends React.Component<Props, {}> {
       <QueryPlanMermaid id="mermaidQueryPlan" ref={this.setRef} />
     ) : (
       <NotSupported>
-        This GraphQL server either doesn't support Apollo Federation, or the
-        query plan extensions is disabled. See the{' '}
+        Please re-run your query to view the plan.
+
+        If you cannot see your plan after re-running the operation, see the {' '}
         <a
           target="_blank"
           rel="noopener noreferrer"

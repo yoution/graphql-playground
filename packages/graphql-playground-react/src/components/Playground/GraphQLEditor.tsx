@@ -300,11 +300,6 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
           setActiveContentRef={this.setSideTabActiveContentRef}
           setWidth={this.setDocsWidth}
         >
-          <SideTab label="Query Plan" activeColor="red" tabWidth="49px">
-            <QueryPlanVisualizer
-              ref={this.setQueryPlanTabRef}
-            />
-          </SideTab>
           <SideTab label="Docs" activeColor="green" tabWidth="49px">
             <GraphDocs
               schema={this.props.schema}
@@ -318,6 +313,12 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
               sessionId={this.props.sessionId}
             />
           </SideTab>
+          <SideTab label="Query Plan" activeColor="purple" tabWidth="49px">
+            <QueryPlanVisualizer
+              ref={this.setQueryPlanTabRef}
+            />
+          </SideTab>
+
         </SideTabs>
         }
       </Container>
