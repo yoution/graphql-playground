@@ -146,6 +146,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   public docExplorerComponent: any // later React.Component<...>
   public graphExplorerComponent: any
   public schemaExplorerComponent: any
+  public queryPlanTabComponent: any
   private queryResizer: any
   private responseResizer: any
   private queryVariablesRef
@@ -288,7 +289,8 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
                 {this.props.isTracingActive ? (
                   <ResponseTracing />
                 ) : (
-                  <QueryPlanVisualizer />
+                  <ResponseTracing />
+                  // <QueryPlanVisualizer />
                 )}
               </ExtensionsDrawer>
             </ResultWrap>
@@ -298,6 +300,11 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
           setActiveContentRef={this.setSideTabActiveContentRef}
           setWidth={this.setDocsWidth}
         >
+          <SideTab label="Query Plan" activeColor="red" tabWidth="49px">
+            <QueryPlanVisualizer
+              ref={this.setQueryPlanTabRef}
+            />
+          </SideTab>
           <SideTab label="Docs" activeColor="green" tabWidth="49px">
             <GraphDocs
               schema={this.props.schema}
@@ -370,6 +377,11 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   setSchemaExplorerRef = ref => {
     if (ref) {
       this.schemaExplorerComponent = ref.getWrappedInstance()
+    }
+  }
+  setQueryPlanTabRef = ref => {
+    if (ref) {
+      this.queryPlanTabComponent = ref.getWrappedInstance()
     }
   }
   setContainerComponent = ref => {
@@ -621,14 +633,14 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
   }
 
   private setDocsWidth = (props: any = this.props) => {
-    if (!this.activeSideTabContent) {
+    if (!this.activeSideTabContent || !this.activeSideTabContent.getWidth) {
       return
     }
     if (!this.props.docsOpen) {
       return
     }
     requestAnimationFrame(() => {
-      const width = this.activeSideTabContent.getWidth()
+      const width = this.activeSideTabContent.getWidth();
       const maxWidth = this.containerComponent.getWidth() - 86
       this.props.changeWidthDocs(props.sessionId, Math.min(width, maxWidth))
     })

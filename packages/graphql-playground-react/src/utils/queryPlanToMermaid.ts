@@ -70,7 +70,7 @@ const nodeFormatters = {
       mermaid += nextNode.mermaid
     })
 
-    return { lastNodeHash: thisNodeHash, mermaid }
+    return { lastNodeHash: tieToPreviousHash, mermaid }
   },
   Parallel: ({
     lastNodeHash,
@@ -79,26 +79,28 @@ const nodeFormatters = {
     // Sequence handles child nodes by passing the last node to each of the subsequent
     // nodes.
     let mermaid = ''
-    const thisNodeHash = hash()
+    const thisNodeHash = hash();
+    let lastNode: nodeFormatterOutput = {lastNodeHash: thisNodeHash, mermaid: ""};
 
     // Setup our node in Mermaid, then link to the previous graph node
     mermaid = `
             ${thisNodeHash}["Parallel"]
             ${lastNodeHash} --> ${thisNodeHash}
-            `
+            `;
 
     // For each of the `nodes`, process and format, using the previous hash instead of the root
     // let tieToPreviousHash = thisNodeHash;
-    ;(currentNode as SequenceNode).nodes.forEach((current: PlanNode) => {
+    (currentNode as SequenceNode).nodes.forEach((current: PlanNode) => {
       const nextNode = process(current)({
         lastNodeHash: thisNodeHash,
         currentNode: current,
       })
       // tieToPreviousHash = nextNode.lastNodeHash
-      mermaid += nextNode.mermaid
+      mermaid += nextNode.mermaid;
+      lastNode = nextNode;
     })
 
-    return { lastNodeHash: thisNodeHash, mermaid }
+    return { lastNodeHash: lastNode.lastNodeHash, mermaid }
   },
   Fetch: ({
     lastNodeHash,
@@ -178,7 +180,7 @@ export function queryPlanToMermaid(serializedQueryPlan: string) {
       currentNode: queryPlan.node,
     })
     const graphOutput = `
-      graph LR
+      graph TD
           ${rootNodeHash}['Query Plan']
           ${graphSyntaxObjects.mermaid}
           ${graphSyntaxObjects.lastNodeHash} --> response(Response)

@@ -17,7 +17,15 @@ export interface Props {
 
 export class QueryPlanVis extends React.Component<Props, {}> {
   private node: any
+  public ref: any
   // private viewer: any
+
+  getWidth(props: any = this.props) {
+    // if (this.node && this.node.clientWidth) {
+    //   return this.node.clientWidth;
+    // }
+    return window.innerWidth / 2;
+  }
 
   componentDidMount() {
     console.dir(mermaid)
@@ -41,7 +49,7 @@ export class QueryPlanVis extends React.Component<Props, {}> {
 
     const graphDefinition = queryPlanToMermaid(this.props.value)
     if (graphDefinition) {
-      mermaid.render('theGraph', graphDefinition, svgCode => {
+      mermaid.render('queryPlanGraph', graphDefinition, svgCode => {
         this.node.innerHTML = svgCode
       })
     }
@@ -51,6 +59,7 @@ export class QueryPlanVis extends React.Component<Props, {}> {
 
   setRef = ref => {
     this.node = ref
+    this.ref = ref
   }
 
   /**
@@ -81,10 +90,12 @@ export class QueryPlanVis extends React.Component<Props, {}> {
 }
 
 const QueryPlanMermaid = styled('div')`
-  position: relative;
-  display: flex;
-  flex: 1;
-  height: 100%;
+color: rgb(0, 0, 0);
+font: 16px / 24px "Open Sans", sans-serif;
+display: block;
+position: relative;
+width: 50vw;
+height: 100vh;
 `
 
 const NotSupported = styled.div`
@@ -92,8 +103,9 @@ const NotSupported = styled.div`
   font-size: 14px;
   color: rgba(241, 143, 1, 1);
 `
-
-export const QueryPlanVisualizer = connect(state => ({
+const mapStateToProps = state => ({
   value: getQueryPlan(state),
   isQueryPlanSupported: getIsQueryPlanSupported(state),
-}))(QueryPlanVis)
+});
+
+export const QueryPlanVisualizer = connect(mapStateToProps, null, null, { withRef: true })(QueryPlanVis)
