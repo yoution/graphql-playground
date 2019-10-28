@@ -97,6 +97,7 @@ display: block;
 position: relative;
 width: 50vw;
 height: 100vh;
+overflow: scroll;
 `
 
 const NotSupported = styled.div`
