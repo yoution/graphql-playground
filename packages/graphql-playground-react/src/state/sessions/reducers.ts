@@ -326,6 +326,7 @@ const reducer = handleActions(
           if (
             response &&
             session.responses!.size === 1 &&
+            // @ts-ignore
             response.isSchemaError
           ) {
             data.responses = List([])

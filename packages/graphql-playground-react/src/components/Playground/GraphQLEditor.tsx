@@ -483,7 +483,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
         return onMouseUp()
       }
 
-      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
+      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent) as Element
       const leftSize = moveEvent.clientX - getLeft(editorBar) - offset
       const rightSize = editorBar.clientWidth - leftSize
       this.props.setEditorFlex(leftSize / rightSize)
@@ -531,7 +531,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
       didMove = true
 
-      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
+      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent) as Element
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
       const bottomSize = editorBar.clientHeight - topSize
       if (bottomSize < 60) {
@@ -579,7 +579,7 @@ class GraphQLEditor extends React.PureComponent<Props & ReduxProps> {
 
       didMove = true
 
-      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent)
+      const editorBar = ReactDOM.findDOMNode(this.editorBarComponent) as Element
       const topSize = moveEvent.clientY - getTop(editorBar) - offset
       const bottomSize = editorBar.clientHeight - topSize
       if (bottomSize < 60) {
