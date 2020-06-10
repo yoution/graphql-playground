@@ -12,6 +12,7 @@ packages=(
 for pkg in "${packages[@]}"
 do
   cd $pkg
+  yarn
   echo "Building ${pkg}"
   yarn build
   cd ..
