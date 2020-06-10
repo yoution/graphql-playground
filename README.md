@@ -1,6 +1,14 @@
+> **NOTE:** This is a fork of `graphql-playground` which is meant to be used by Apollo Server.  It is not intended to be used directly.  Those looking to use GraphQL Playground directly can refer to [the upstream repository](https://github.com/prisma-labs/graphql-playground) for usage instructions.
+
+> **SECURITY WARNING:** The upstream fork of `graphql-playground` repository **had a severe XSS Reflection attack vulnerability to unsanitized user input** prior to being fixed in `graphql-playground-html@1.6.20` (note, this is a different version than we publish from this fork on `@apollographql/graphql-playground-html`.  The way this package was used by Apollo Server (to provide a default GraphQL Playground experience) did not provide the ability to users to have been dynamically exposed to the attack in the same way as the package's own usage instructions may have encouraged.  In order for Apollo Server users to have been affected they would have to had instrumented the package _as a separate middleware_ or explicitly put vulnerable code into the static configuration of the `playground` property on the `ApolloServer` constructor.  Apollo Server does not provide any ability to do per-request playground configuration.  **Still, we have fixed this in `@apollographql/graphql-playground-html` version `1.6.25`.** [More details are available at the upstream repository](https://github.com/prisma-labs/graphql-playground/blob/20f0832bb8/SECURITY.md).
+
 <p align="center"><img src="https://imgur.com/5fzMbyV.png" width="269"></p>
 
-[![npm version](https://badge.fury.io/js/graphql-playground-react.svg)](https://badge.fury.io/js/graphql-playground-react) [![CircleCI](https://circleci.com/gh/prisma/graphql-playground.svg?style=shield)](https://circleci.com/gh/prisma/graphql-playground)
+[![npm version](https://badge.fury.io/js/%40apollographql%2Fgraphql-playground-react.svg)](https://badge.fury.io/js/%40apollographql%2Fgraphql-playground-react)
+
+**Future of this repository**: see [the announcement issue](https://github.com/prisma-labs/graphql-playground/issues/1143) for details.
+
+---
 
 GraphQL IDE for better development workflows (GraphQL Subscriptions, interactive docs & collaboration). <br />
 **You can download the [desktop app](https://github.com/prisma/graphql-playground/releases) or use the web version at graphqlbin.com: [Demo](https://graphqlbin.com/v2/6RQ6TM)**
@@ -118,12 +126,12 @@ interface ISettings {
 
 ```ts
 interface Tab {
-	endpoint: string
-	query: string
-	name?: string
-	variables?: string
-	responses?: string[]
-	headers?: { [key: string]: string }
+  endpoint: string
+  query: string
+  name?: string
+  variables?: string
+  responses?: string[]
+  headers?: { [key: string]: string }
 }
 ```
 
@@ -165,8 +173,8 @@ Including Fonts (`1.`)
 
 ```html
 <link
-	href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700"
-	rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700"
+  rel="stylesheet"
 />
 ```
 
@@ -179,10 +187,10 @@ import { Provider } from 'react-redux'
 import { Playground, store } from 'graphql-playground-react'
 
 ReactDOM.render(
-	<Provider store={store}>
-		<Playground endpoint="https://api.graph.cool/simple/v1/swapi" />
-	</Provider>,
-	document.body,
+  <Provider store={store}>
+    <Playground endpoint='https://api.graph.cool/simple/v1/swapi' />
+  </Provider>,
+  document.body,
 )
 ```
 
@@ -228,18 +236,18 @@ import lambdaPlayground from 'graphql-playground-middleware-lambda'
 // const lambdaPlayground = require('graphql-playground-middleware-lambda').default
 
 exports.graphqlHandler = function graphqlHandler(event, context, callback) {
-	function callbackFilter(error, output) {
-		// eslint-disable-next-line no-param-reassign
-		output.headers['Access-Control-Allow-Origin'] = '*'
-		callback(error, output)
-	}
+  function callbackFilter(error, output) {
+    // eslint-disable-next-line no-param-reassign
+    output.headers['Access-Control-Allow-Origin'] = '*'
+    callback(error, output)
+  }
 
-	const handler = graphqlLambda({ schema: myGraphQLSchema })
-	return handler(event, context, callbackFilter)
+  const handler = graphqlLambda({ schema: myGraphQLSchema })
+  return handler(event, context, callbackFilter)
 }
 
 exports.playgroundHandler = lambdaPlayground({
-	endpoint: '/dev/graphql',
+  endpoint: '/dev/graphql',
 })
 ```
 
@@ -263,6 +271,10 @@ functions:
           cors: true
 ```
 
+#### Security Issue
+
+There is an [XSS Reflection Vulnerability](./SECURITY.md) when using these middlewares with unsanitized user input before
+
 ## Development
 
 ```sh
@@ -281,27 +293,27 @@ These are the available options:
 
 ```ts
 export interface EditorColours {
-	property: string
-	comment: string
-	punctuation: string
-	keyword: string
-	def: string
-	qualifier: string
-	attribute: string
-	number: string
-	string: string
-	builtin: string
-	string2: string
-	variable: string
-	meta: string
-	atom: string
-	ws: string
-	selection: string
-	cursorColor: string
-	editorBackground: string
-	resultBackground: string
-	leftDrawerBackground: string
-	rightDrawerBackground: string
+  property: string
+  comment: string
+  punctuation: string
+  keyword: string
+  def: string
+  qualifier: string
+  attribute: string
+  number: string
+  string: string
+  builtin: string
+  string2: string
+  variable: string
+  meta: string
+  atom: string
+  ws: string
+  selection: string
+  cursorColor: string
+  editorBackground: string
+  resultBackground: string
+  leftDrawerBackground: string
+  rightDrawerBackground: string
 }
 ```
 
