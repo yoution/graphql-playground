@@ -102,9 +102,10 @@ const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm/@apollographql
 
 
 const renderConfig = (config) => {
-  return filterXSS(`<div id="config">${JSON.stringify(config)}</div>`, {
-    whiteList: { div: ['id'] },
-  })
+  return '<div id="config">' + filterXSS(JSON.stringify(config), {
+    // @ts-ignore
+    whiteList: [],
+  }) + '</div>';
 }
 
 export function renderPlaygroundPage(options: RenderPageOptions) {
