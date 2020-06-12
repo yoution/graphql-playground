@@ -87,7 +87,7 @@ const filter = (val) => {
 const loading = getLoadingMarkup()
 
 const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm/@apollographql', faviconUrl }) => {
-  const buildCDNUrl = (packageName: string, suffix: string) => filter(`${cdnUrl}/${packageName}/${version ? `@${version}/` : ''}${suffix}` || '')
+  const buildCDNUrl = (packageName: string, suffix: string) => filter(`${cdnUrl}/${packageName}${version ? `@${version}/` : ''}${suffix}` || '')
   return `
     <link 
       rel="stylesheet" 
