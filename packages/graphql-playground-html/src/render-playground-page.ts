@@ -102,7 +102,7 @@ const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm/@apollographql
 
 
 const renderConfig = (config) => {
-  return '<div id="config" style="display: none;">' + filterXSS(JSON.stringify(config), {
+  return '<div id="playground-config" style="display: none;">' + filterXSS(JSON.stringify(config), {
     // @ts-ignore
     whiteList: [],
   }) + '</div>';
@@ -200,7 +200,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
   
         const root = document.getElementById('root');
         root.classList.add('playgroundIn');
-        const configText = document.getElementById('config').innerText
+        const configText = document.getElementById('playground-config').innerText
         if(configText && configText.length) {
           try {
             GraphQLPlayground.init(root, JSON.parse(configText))
