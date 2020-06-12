@@ -137,7 +137,7 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
     <meta charset=utf-8 />
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Source+Code+Pro:400,700" rel="stylesheet">
-    <title>${extendedOptions.title || 'GraphQL Playground'}</title>
+    <title>${filter(extendedOptions.title) || 'GraphQL Playground'}</title>
     ${
     extendedOptions.env === 'react' || extendedOptions.env === 'electron'
       ? ''
