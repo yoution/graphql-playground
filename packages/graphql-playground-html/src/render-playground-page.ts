@@ -86,17 +86,18 @@ const filter = (val) => {
 
 const loading = getLoadingMarkup()
 
-const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm/@apollographql', faviconUrl }) => {
+const reactPackageName = '@apollographql/graphql-playground-react';
+const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm', faviconUrl }) => {
   const buildCDNUrl = (packageName: string, suffix: string) => filter(`${cdnUrl}/${packageName}${version ? `@${version}/` : ''}${suffix}` || '')
   return `
-    <link 
-      rel="stylesheet" 
-      href="${buildCDNUrl('graphql-playground-react', 'build/static/css/index.css')}"
+    <link
+      rel="stylesheet"
+      href="${buildCDNUrl(reactPackageName, 'build/static/css/index.css')}"
     />
     ${typeof faviconUrl === 'string' ? `<link rel="shortcut icon" href="${filter(faviconUrl || '')}" />` : ''}
-    ${faviconUrl === undefined ? `<link rel="shortcut icon" href="${buildCDNUrl('graphql-playground-react', 'build/favicon.png')}" />` : ''}
-    <script 
-      src="${buildCDNUrl('graphql-playground-react', 'build/static/js/middleware.js')}"
+    ${faviconUrl === undefined ? `<link rel="shortcut icon" href="${buildCDNUrl(reactPackageName, 'build/favicon.png')}" />` : ''}
+    <script
+      src="${buildCDNUrl(reactPackageName, 'build/static/js/middleware.js')}"
     ></script>
 `}
 
