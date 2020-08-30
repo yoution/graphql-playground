@@ -197,7 +197,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     setSubscriptionEndpoint(props.subscriptionEndpoint)
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     // init redux
     this.props.initState(getWorkspaceId(this.props), this.props.endpoint)
     this.props.setConfigString(this.props.configString)
@@ -213,7 +213,7 @@ export class Playground extends React.PureComponent<Props & ReduxProps, State> {
     this.mounted = true
   }
 
-  componentWillReceiveProps(nextProps: Props & ReduxProps) {
+  UNSAFE_componentWillReceiveProps(nextProps: Props & ReduxProps) {
     if (this.props.createApolloLink !== nextProps.createApolloLink) {
       setLinkCreator(nextProps.createApolloLink)
     }

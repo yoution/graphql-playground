@@ -9,6 +9,7 @@ import {
   changeWidthDocs,
   changeKeyMove,
   setDocsVisible,
+  changeWidthDocs
 } from '../../../state/docs/actions'
 import { GraphQLSchema } from 'graphql'
 import { getSessionDocs } from '../../../state/docs/selectors'
@@ -253,6 +254,7 @@ const mapDispatchToProps = dispatch =>
       changeWidthDocs,
       changeKeyMove,
       setDocsVisible,
+      changeWidthDocs
     },
     dispatch,
   )
@@ -269,6 +271,7 @@ const ConnectedGraphDocs = connect<StateFromProps, DispatchFromProps, Props>(
   { withRef: true },
 )(SideTabs)
 
+// @ts-ignore
 ConnectedGraphDocs.Tab = SideTab
 
 export default ConnectedGraphDocs
