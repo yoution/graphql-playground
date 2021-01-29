@@ -74,7 +74,6 @@ export class SchemaFetcher {
     if (fetching) {
       return fetching
     }
-
     const promise = this.fetchSchema(session)
     this.fetching = this.fetching.set(hash, promise)
     return promise

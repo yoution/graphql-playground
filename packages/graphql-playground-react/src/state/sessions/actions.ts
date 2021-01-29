@@ -93,7 +93,8 @@ export const {
   PRETTIFY_QUERY: simpleAction(),
   INJECT_HEADERS: (headers, endpoint) => ({ headers, endpoint }),
 
-  /* setting multiple props
+  // setting multiple props
+  /*
     this.setState({
       isExtensionsDrawerOpen: true,
       isTracingActive: false,

@@ -44,7 +44,6 @@ function* setQueryFacts() {
   // debounce by 100 ms
   yield call(delay, 100)
   const session: Session = yield select(getSelectedSession)
-
   const { schema } = yield schemaFetcher.fetch(session)
   try {
     const ast = parse(session.query)

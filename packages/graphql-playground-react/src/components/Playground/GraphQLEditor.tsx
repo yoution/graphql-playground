@@ -739,6 +739,12 @@ interface TitleProps {
 }
 
 const BottomDrawerTitle = styled.div`
+  background: #0b1924;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.53px;
+  line-height: 14px;
+  font-size: 14px;
   padding: 14px 14px 15px 21px;
   user-select: none;
 `

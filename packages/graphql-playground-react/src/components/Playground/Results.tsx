@@ -79,7 +79,7 @@ export default connect(mapStateToProps)(Results)
 
 const ResultWindow = styled<ResultWrapperProps, 'div'>('div')`
   flex: 1;
-  height: auto;
+  height: ${props => (props.isSubscription ? 'auto' : '100%')};
   position: relative;
   overflow: ${props => (props.isSubscription ? 'auto' : 'visible')};
   max-height: none !important;
