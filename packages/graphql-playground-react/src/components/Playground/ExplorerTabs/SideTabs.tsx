@@ -6,7 +6,6 @@ import { getLeft } from 'graphiql/dist/utility/elementPosition'
 import {
   addStack,
   toggleDocs,
-  changeWidthDocs,
   changeKeyMove,
   setDocsVisible,
   changeWidthDocs
@@ -251,7 +250,6 @@ const mapDispatchToProps = dispatch =>
     {
       addStack,
       toggleDocs,
-      changeWidthDocs,
       changeKeyMove,
       setDocsVisible,
       changeWidthDocs
