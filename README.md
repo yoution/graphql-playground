@@ -6,3 +6,26 @@
 
 **Future of this repository**: This fork aims to be deprecated, eventually.  For the upstream fork, see [their announcement issue](https://github.com/prisma-labs/graphql-playground/issues/1143) for details.
 
+### Releasing the React Version
+
+> The `html` version is probably similar — replacing the literal `react` in the commands below with `html` - but rarely gets updated or published by us, so I can't validate that at the moment.
+
+```sh
+# Install it all.
+yarn
+
+# Build it all
+#   Technically the release does the build too, but I enjoy the pre-flight test.
+yarn run build
+
+# Release it all
+./scripts/release-react.sh
+
+# Add the package files that were version bumped.
+git add ./packages/graphql-playground-react/package.json
+
+git commit -m 'Version bump after publish'
+
+# Assuming origin is https://github.com/apollographql/graphql-playground/
+git push origin apollo
+```
