@@ -91,7 +91,7 @@ const loading = getLoadingMarkup()
 
 const reactPackageName = '@apollographql/graphql-playground-react';
 const getCdnMarkup = ({ version, cdnUrl = '//cdn.jsdelivr.net/npm', faviconUrl }) => {
-  const buildCDNUrl = (packageName: string, suffix: string) => filter(`${cdnUrl}/${packageName}${version ? `@${version}/` : ''}${suffix}` || '')
+  const buildCDNUrl = (packageName: string, suffix: string) => filter(`${cdnUrl}/${packageName}${version ? `@${version}` : ''}/${suffix}` || '')
   return `
     <link
       rel="stylesheet"
