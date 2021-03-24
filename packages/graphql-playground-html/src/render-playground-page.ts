@@ -1,6 +1,8 @@
 import { filterXSS } from 'xss';
 
 import getLoadingMarkup from './get-loading-markup'
+import {getInitHooks, getRequestHooks} from './hooks'
+import {setInitHooks, setRequestHooks} from './middleware'
 
 export interface MiddlewareOptions {
   endpoint?: string
@@ -208,6 +210,10 @@ export function renderPlaygroundPage(options: RenderPageOptions) {
         if(configText && configText.length) {
           try {
             GraphQLPlayground.init(root, JSON.parse(configText))
+            ${getInitHooks()}
+            ${setInitHooks()}
+            ${getRequestHooks()}
+            ${setRequestHooks()}
           }
           catch(err) {
             console.error("could not find config")
